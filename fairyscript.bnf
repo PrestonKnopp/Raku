@@ -1,0 +1,271 @@
+<manuscript>          ::= <block>
+
+<block>               ::= <statement> <block>?
+
+<statement>           ::= <directive>
+                        | <annotation>
+                        | <comment>
+                        | <line>
+
+<comment>             ::= "#" .*
+
+<directive>           ::= <scene>
+                        | <enter>
+                        | <action>
+                        | <exit>
+                        | <music>
+                        | <gfx>
+                        | <sfx>
+                        | <fmv>
+                        | <camera>
+                        | <choice>
+
+<annotation>          ::= <description>
+                        | <section>
+                        | <flag>
+                        | <var>
+                        | <dialog>
+                        | <goto>
+                        | <execute>
+                        | <end>
+                        | <while>
+                        | <if>
+                        | <include>
+                        | <characters>
+                        | <python>
+
+<line>                ::= ( <id> | <string> )? ( "(" <appearance> ")" )? ":"
+                            <string>
+
+<scene>               ::= <scene-open> ":" <transition-to>? <id> "]"
+
+<enter>               ::= <enter-open> ":" <id> ( "(" <appearance> ")" )?
+                            <transition-in>? <motion>? "]"
+
+<action>              ::= "[" <id> ":" <appearance> "]"
+                        | "[" <id> ":" "GO" <destination> <duration>? "]"
+                        | "[" <id> ":" <appearance> "," "GO" <destination>
+                            <duration>? "]"
+
+<exit>                ::= <exit-open> ":" <id> <transition-out>? <motion>? "]"
+
+<music>               ::= <music-open> ":" "STOP" ( <name> | "ALL" )?
+                            <duration>? "]"
+                        | <music-open> ":" <name> ( "," "FADEOUT" <whitespace>
+                            "OLD" <duration>? )? "]"
+
+<gfx>                 ::= <gfx-open> ":" "LOOP"? <id> "]"
+                        | <gfx-open> ":" "STOP" ( <id> | "ALL" )? <duration>?
+                            "]"
+
+<sfx>                 ::= <sfx-open> ":" "LOOP"? <name> "]"
+                        | <sfx-open> ":" "STOP" ( <name> | "ALL" )? <duration>?
+                            "]"
+
+<fmv>                 ::= <fmv-open> ":" <name> "]"
+
+<camera>              ::= <camera-open> ":" <camera-action> "]"
+
+<choice>              ::= <choice-open> ( ":" <id> )? "]" <string>? <option>
+
+<option>              ::= "*" <string> ":" ( "SHOW" <whitespace> "IF"
+                            <boolean-expression> "," )? ( <varset> "AND" )? "GO"
+                            <destination> <option>?
+
+<varset>              ::= ( <varset> "AND" )? "SET" <id> ( <inc-dec> |
+                            <expression> )
+
+<description>         ::= <description-open> ":" ( <id>? ":" )?
+                            <unquoted-string> ")"
+
+<section>             ::= <section-open> ":" <id> ( "WITH" <whitespace> "PARAMS"
+                            <param-declaration> )? ")"
+
+<flag>                ::= <flag-open> ":" <id> <boolean-expression>? ")"
+
+<var>                 ::= <var-open> ":" <id> ( <inc-dec> | <expression> )? ")"
+
+<dialog>              ::= <dialog-open> ":" ( "HIDE" | "SHOW" | "AUTO" ) ")"
+
+<goto>                ::= <goto-open> ":" <id> ")"
+
+<execute>             ::= <execute-open> ":" <id> ( "WITH" <whitespace> "PARAMS"
+                            <param-set> )? ")"
+
+<end>                 ::= <end-open> ( ":" "RETURN" <expression> )? ")"
+
+<while>               ::= <while-open> ":" <boolean-expression> ")" "{" <block>
+                            "}"
+
+<if>                  ::= <if-open> ":" <boolean-expression> ")" "{" <block> "}"
+                            <else-if>? <else>?
+
+<else-if>             ::= <else-if-open> ":" <boolean-expression> ")" "{"
+                            <block> "}" <else-if>?
+
+<else>                ::= <else-open> ")" "{" <block> "}"
+
+<include>             ::= <include-open> ":" <string> ( "FOR" <whitespace>
+                            "TARGET" <id-list> )? ( "WITH" <whitespace>
+                            "PARSING" <boolean-literal>? )? ")"
+
+<characters>          ::= <characters-open> ":" <string> ")"
+
+<python>              ::= <python-open> ")" "{" <python-block> "}"
+
+<python-block>        ::= <non-rbrace>* ( <backslash> . <non-rbrace>* )*
+
+<transition-to>       ::= <id> "TO"
+
+<transition-in>       ::= <id> "IN"
+                        | "WITH" <whitespace> "PREVIOUS"
+
+<transition-out>      ::= <id> "OUT"
+                        | "WITH" <whitespace> "PREVIOUS"
+
+<appearance>          ::= ( <appearance> "," )? <id>
+
+<motion>              ::= <origin> <destination>? <duration>?
+                        | <destination> <duration>?
+                        | <duration>
+
+<destination>         ::= "TO" <id>
+
+<origin>              ::= "FROM" <id>
+
+<duration>            ::= ( "FOR" | "OVER" ) <number> "SECONDS"?
+                        | "QUICKLY"
+                        | "SLOWLY"
+
+<name>                ::= <string>
+                        | <id>
+
+<camera-action>       ::= <cam-instruction> ( "AND" <camera-action> )?
+
+<cam-instruction>     ::= "SNAP" <whitespace> "TO" <id>
+                        | "PAN" <whitespace> "TO" <id> <duration>?
+                        | "ZOOM" ( "OUT" | "IN" ) <duration>?
+
+<param-declaration>   ::= <id> ( "=" <expression> )? ( "," <param-declaration>
+                            )?
+
+<param-set>           ::= ( <id> "=" )? <expression> ( "," <param-set> )?
+
+<boolean-literal>     ::= "OFF"
+                        | "ON"
+
+<boolean-expression>  ::= <boolean-literal>
+                        | <raw-expression>
+                        | <id>
+
+<expression>          ::= <boolean-expression>
+                        | <string>
+                        | <number>
+
+<inc-dec>             ::= ( "INC" | "DEC" ) ( "BY" <number> )?
+
+<scene-open>          ::= "[" ( "S" | "s" ) ( "C" | "c" ) ( "E" | "e" ) ( "N" |
+                            "n" ) ( "E" | "e" )
+
+<enter-open>          ::= "[" ( "E" | "e" ) ( "N" | "n" ) ( "T" | "t" ) ( "E" |
+                            "e" ) ( "R" | "r" )
+
+<exit-open>           ::= "[" ( "E" | "e" ) ( "X" | "x" ) ( "I" | "i" ) ( "T" |
+                            "t" )
+
+<music-open>          ::= "[" ( "M" | "m" ) ( "U" | "u" ) ( "S" | "s" ) ( "I" |
+                            "i" ) ( "C" | "c" )
+
+<gfx-open>            ::= "[" ( "G" | "g" ) ( "F" | "f" ) ( "X" | "x" )
+
+<sfx-open>            ::= "[" ( "S" | "s" ) ( "F" | "f" ) ( "X" | "x" )
+
+<fmv-open>            ::= "[" ( "F" | "f" ) ( "M" | "m" ) ( "V" | "v" )
+
+<camera-open>         ::= "[" ( "C" | "c" ) ( "A" | "a" ) ( "M" | "m" ) ( "E" |
+                            "e" ) ( "R" | "r" ) ( "A" | "a" )
+
+<choice-open>         ::= "[" ( "C" | "c" ) ( "H" | "h" ) ( "O" | "o" ) ( "I" |
+                            "i" ) ( "C" | "c" ) ( "E" | "e" )
+
+<description-open>    ::= "(" ( "D" | "d" ) ( "E" | "e" ) ( "S" | "s" ) ( "C" |
+                            "c" ) ( "R" | "r" ) ( "I" | "i" ) ( "P" | "p" ) (
+                            "T" | "t" ) ( "I" | "i" ) ( "O" | "o" ) ( "N" | "n" )
+
+<section-open>        ::= "(" ( "S" | "s" ) ( "E" | "e" ) ( "C" | "c" ) ( "T" |
+                            "t" ) ( "I" | "i" ) ( "O" | "o" ) ( "N" | "n" )
+
+<flag-open>           ::= "(" ( "F" | "f" ) ( "L" | "l" ) ( "A" | "a" ) ( "G" |
+                            "g" )
+
+<var-open>            ::= "(" ( "V" | "v" ) ( "A" | "a" ) ( "R" | "r" )
+
+<dialog-open>         ::= "(" ( "D" | "d" ) ( "I" | "i" ) ( "A" | "a" ) ( "L" |
+                            "l" ) ( "O" | "o" ) ( "G" | "g" )
+
+<goto-open>           ::= "(" ( "G" | "g" ) ( "O" | "o" ) <whitespace>? ( "T" |
+                            "t" ) ( "O" | "o" )
+
+<execute-open>        ::= "(" ( "E" | "e" ) ( "X" | "x" ) ( "E" | "e" ) ( "C" |
+                            "c" ) ( "U" | "u" ) ( "T" | "t" ) ( "E" | "e" )
+
+<end-open>            ::= "(" ( "E" | "e" ) ( "N" | "n" ) ( "D" | "d" )
+
+<while-open>          ::= "(" ( "W" | "w" ) ( "H" | "h" ) ( "I" | "i" ) ( "L" |
+                            "l" ) ( "E" | "e" )
+
+<if-open>             ::= "(" ( "I" | "i" ) ( "F" | "f" )
+
+<else-if-open>        ::= "(" ( "E" | "e" ) ( "L" | "l" ) ( ( "S" | "s" )
+                            <whitespace>? ( "E" | "e" ) )? ( "I" | "i" ) ( "F" |
+                            "f" )
+
+<else-open>           ::= "(" ( "E" | "e" ) ( "L" | "l" ) ( "S" | "s" ) ( "E" |
+                            "e" )
+
+<include-open>        ::= "(" ( "I" | "i" ) ( "N" | "n" ) ( "C" | "c" ) ( "L" |
+                            "l" ) ( "U" | "u" ) ( "D" | "d" ) ( "E" | "e" )
+
+<characters-open>     ::= "(" ( "C" | "c" ) ( "H" | "h" ) ( "A" | "a" ) ( "R" |
+                            "r" ) ( "A" | "a" ) ( "C" | "c" ) ( "T" | "t" ) (
+                            "E" | "e" ) ( "R" | "r" ) ( "S" | "s" )
+
+<id>                  ::= <alpha> ( <alphanumeric> | "-" )*
+
+<id-list>             ::= ( <id-list> "AND" )? <id>
+
+<string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
+
+<number>              ::= ( ( "+" | "-" ) <whitespace>? )? <digit>+ ( "."
+                            <digit>* )?
+
+<unquoted-string>     ::= <non-rparen>* ( <backslash> . <non-rparen>* )*
+
+<raw-expression>      ::= "'" <non-squote>* ( <backslash> . <non-squote>* )* "'"
+
+<non-rbrace>          ::= [^ "}" <backslash> ]
+
+<non-rparen>          ::= [^ ")" <backslash> ]
+
+<non-dquote>          ::= [^ '"' <backslash> ]
+
+<non-squote>          ::= [^ "'" <backslash> ]
+
+<backslash>           ::= "\"
+
+<whitespace>          ::= \s
+
+<alphanumeric>        ::= <alpha> | <digit>
+
+<digit>               ::= "0"
+                        | "1"
+                        | "2"
+                        | "3"
+                        | "4"
+                        | "5"
+                        | "6"
+                        | "7"
+                        | "8"
+                        | "9"
+
+<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]

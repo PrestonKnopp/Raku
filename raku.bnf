@@ -1,0 +1,10 @@
+<rakuscript>          ::= <block>
+
+<block>               ::= <statement> <block>?
+
+<statement>           ::= <>
+                        | <annotation>
+                        | <comment>
+                        | <line>
+
+<comment>             ::= "#" .*

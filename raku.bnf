@@ -3,6 +3,7 @@
 <block>               ::= <statement> <block>?
 
 <statement>           ::= <definition>
+                        | <gdscpript>
                         | <charater-def>
                         | <annotation>
                         | <comment>
@@ -10,17 +11,24 @@
 
 <comment>             ::= "#" .*
 
-<definition>          ::= "define" <ws> <var-name> <ws>? "=" .
+<definition>          ::= "define" <ws> <change-var>
 
-<charater-def>        ::= "charater" <ws> <var-name> <ws> <charater-key> <ws> .
+<charater-def>        ::= <charater-base> <ws> <string>
+                        | <charater-base> <ws> <charater-key> <ws>
+                        | <charater-base> <ws> "stats" <change-var>
+
+<character-base>      ::= "charater" <ws> <var-name>
 
 <character-key>        ::= "name"
                         | "avatar"
                         | "color"
-                        | "stats"
                         | "kind"
                         | "prefix"
                       	| "suffix"
+
+<gdscpript>           ::= "gd:" (<statement> | <block>)
+
+<change-var>          ::= <var-name> <ws>? "=" .
 
 <boolean-literal>     ::= "off" | "on"
 

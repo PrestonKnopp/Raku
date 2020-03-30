@@ -16,7 +16,7 @@ charater player "Protag-kun"
 
 # I assume that eva is define in scene using nodes
 # eva like us
-charater eva stat like = true
+charater eva stats like = true
 
 # this is just some gdscpript code
 gd: var gdvar = true

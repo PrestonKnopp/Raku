@@ -2,9 +2,62 @@
 
 <block>               ::= <statement> <block>?
 
-<statement>           ::= <>
+<statement>           ::= <definition>
+                        | <charater-def>
                         | <annotation>
                         | <comment>
                         | <line>
 
 <comment>             ::= "#" .*
+
+<definition>          ::= "define" <ws> <var-name> <ws>? "=" .
+
+<charater-def>        ::= "charater" <ws> <var-name> <ws> <charater-key> <ws> .
+
+<character-key>        ::= "name"
+                        | "avatar"
+                        | "color"
+                        | "stats"
+                        | "kind"
+                        | "prefix"
+                      	| "suffix"
+
+<boolean-literal>     ::= "off" | "on"
+
+<string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
+
+<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "."
+                            <digit>* )?
+
+<unquoted-string>     ::= <non-rparen>* ( <backslash> . <non-rparen>* )*
+
+<raw-expression>      ::= "'" <non-squote>* ( <backslash> . <non-squote>* )* "'"
+
+<non-rbrace>          ::= [^ "}" <backslash> ]
+
+<non-rparen>          ::= [^ ")" <backslash> ]
+
+<non-dquote>          ::= [^ '"' <backslash> ]
+
+<non-squote>          ::= [^ "'" <backslash> ]
+
+<backslash>           ::= "\"
+
+<ws>                  ::= \s
+
+<alphanumeric>        ::= <alpha> | <digit>
+
+<var-name>        ::= <alpha> <digit>?
+
+<digit>               ::= "0"
+                        | "1"
+                        | "2"
+                        | "3"
+                        | "4"
+                        | "5"
+                        | "6"
+                        | "7"
+                        | "8"
+                        | "9"
+
+<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]

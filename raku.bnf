@@ -36,18 +36,9 @@
 
 <alphanumeric>        ::= <alpha> | <digit>
 
-<var-name>        ::= <alpha> <digit>?
+<var-name>            ::= <alpha> <digit>?
 
-<digit>               ::= "0"
-                        | "1"
-                        | "2"
-                        | "3"
-                        | "4"
-                        | "5"
-                        | "6"
-                        | "7"
-                        | "8"
-                        | "9"
+<digit>               ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 <alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
 
@@ -59,12 +50,12 @@
 
 <character-base>      ::= "charater" <ws> <var-name>
 
-<character-key>        ::= "name"
+<character-key>       ::= "name"
                         | "avatar"
                         | "color"
                         | "kind"
                         | "prefix"
-                      	| "suffix"
+                        | "suffix"
 
 <gdscpript>           ::= "gd:" (<statement> | <block>)
 
@@ -73,21 +64,21 @@
 
 
 <expression>          ::= <number>
-                         | <string>
-                         | <array>
-                         | <dictionary>
-                         | <boolean>
-                         
+                        | <string>
+                        | <array>
+                        | <dictionary>
+                        | <boolean>
+
 <boolean>             ::= "true" | "false" | <boolean-expression>
-                         
+
 <comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
 
 <not>                 ::= "!"|"not"
-                         
+
 <boolean-expression>  ::= <not>? <var_name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
 
 <logic>               ::= "and" | "&&" | "or" | "||"
-                         
+
 <while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
 
 <if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>

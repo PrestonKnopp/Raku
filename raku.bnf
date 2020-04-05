@@ -15,8 +15,7 @@
 
 <string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
 
-<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "."
-                            <digit>* )?
+<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "." <digit>+ )?
 
 <unquoted-string>     ::= <non-rparen>* ( <backslash> . <non-rparen>* )*
 

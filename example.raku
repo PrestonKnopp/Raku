@@ -2,21 +2,25 @@
 
 # define some saveable values
 define a = 3
-define b = 0.3
-define e = "some string"
-define d = []
-define e = {}
-define f = false
+define:
+  b = 0.3
+  e = "some string"
+  d = []
+  e = {}
+  f = false
 
 # you can overwrite var created in in another script before
 x += 40
 
 # define new charater
-charater player "Protag-kun"
+charater player "Protag-kun":
+  color = green # this will set this characte name label using `green` color defined in Rakugo/main.gd
+
 
 # I assume that eva is define in scene using nodes
 # eva like us
-charater eva stats like = true
+charater eva stats.like = true
+   
 
 # this is just some gdscpript code
 gd: var gdvar = true
@@ -28,13 +32,17 @@ func test_func():
 # this is dialog
 dialog test_dialog:
 
+  # you can use diffrent style of displaying dialog ui:
+  kind fullscreen
+  "This is some intro into the story."
+
   # this is how you say things
   "Hi!"
 
   # this is how show eva
   show eva
 
-  # this how you can give eva maid dress
+  # this how you show eva in maid dress
   show eva maid
 
   # this how give eva smile
@@ -44,14 +52,14 @@ dialog test_dialog:
   show eva maid sad
 
   # you can ask player for his name
-  use ask with value player.name
+  ask with value player.name
   eva "Hi! What is your name?"
 
   # you can use vars, emoji and markups in dialog
   eva "Nice to meet you {b}[player.name]{/b} {:smile:}"
 
   # you can give player choice
-  use menu
+  menu: reuseble_menu
   "what do you want"
     "first choice":
       "this is first choice"
@@ -64,3 +72,7 @@ dialog test_dialog:
 
     "go to scene with mini-game":
       jump Minigame
+     
+    "show this menu again":
+      reuseble_menu()
+    

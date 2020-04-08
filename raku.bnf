@@ -13,8 +13,6 @@
 
 <change-var>          ::= <var-name> <ws>? "=" <expression>
 
-<boolean>             ::= "true" | "false"
-
 <string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
 
 <number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "."
@@ -70,7 +68,7 @@
 
 <gdscpript>           ::= "gd:" (<statement> | <block>)
 
-<array>               ::= '[' (<expression>)? ']'
+<array>               ::= '[' <expression>? ']'
 <dictionary>          ::= '{' ('"'<var_name>'"': <expression> )? '}'
 
 
@@ -79,3 +77,23 @@
                          | <array>
                          | <dictionary>
                          | <boolean>
+                         
+<boolean>             ::= "true" | "false" | <boolean-expression>
+                         
+<comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
+
+<not>                 ::= "!"|"not"
+                         
+<boolean-expression>  ::= <not>? <var_name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
+
+<logic>               ::= "and" | "&&" | "or" | "||"
+                         
+<while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
+
+<if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
+                            <else-if>? <else>?
+
+<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block>
+                            <block> "}" <else-if>?
+
+<else>                ::= "else" ("(")? ":" <block>

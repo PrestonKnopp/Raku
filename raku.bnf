@@ -9,13 +9,13 @@
 
 <block>               ::= <statement> | <indent> <newline> <statement>+ <dedent>
 
-<definition>           ::= "define" <ws> <change-var>
+<definition>           ::= "define" " " <change-var>
 
-<character-def>       ::= <character-base> <ws> <string>
-                        | <character-base> <ws> <character-key> <ws>
-                        | <character-base> <ws> "stats" <change-var>
+<character-def>       ::= <character-base> " " <string>
+                        | <character-base> " " <character-key> " "
+                        | <character-base> " " "stats" <change-var>
 
-<character-base>      ::= "character" <ws> <var-name>
+<character-base>      ::= "character" " " <var-name>
 
 <character-key>       ::= "name"
                         | "avatar"
@@ -28,7 +28,7 @@
 <gdscript>            ::= "gd:" <gdscript-block>
 
 
-<change-var>          ::= <var-name> <ws>? "=" <expression>
+<change-var>          ::= <var-name> " "? "=" <expression>
 
 <var-name>            ::= <alpha> <digit>?
 
@@ -51,17 +51,17 @@
                         | <boolean>
 
 
-<array>               ::= '[' <expression>? ']'
+<array>               ::= "[" <any-ws> ( <expression> ( <any-ws> "," <any-ws> <expression>? )? )* "]"
 
 <dictionary>          ::= '{' ('"'<var-name>'"': <expression> )? '}'
 
 
-<string>              ::= ('"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"')
-                        | ("'" <non-squote>* ( <backslash> . <non-squote>* )* "'")
+<string>              ::= ('"' <non-dquote>* ( "\" . <non-dquote>* )* '"')
+                        | ("'" <non-squote>* ( "\" . <non-squote>* )* "'")
 
-<non-dquote>          ::= [^ '"' <backslash> ]
+<non-dquote>          ::= [^ '"' "\" ]
 
-<non-squote>          ::= [^ "'" <backslash> ]
+<non-squote>          ::= [^ "'" "\" ]
 
 
 <boolean-expression>  ::= <not>? <var-name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
@@ -75,7 +75,7 @@
 <logic>               ::= "and" | "&&" | "or" | "||"
 
 
-<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "." <digit>+ )?
+<number>              ::= ( ( "+" | "-" ) " "? )? <digit>+ ( "." <digit>+ )?
 
 <alphanumeric>        ::= <alpha> | <digit>
 
@@ -83,9 +83,9 @@
 
 <alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
 
-<backslash>           ::= "\"
+<any-ws>              ::= [ " " <tab> <newline> ]*
 
-<ws>                  ::= \s
+<tab>                 ::= \t
 
 <newline>             ::= \n
 

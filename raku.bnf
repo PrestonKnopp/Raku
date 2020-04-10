@@ -1,21 +1,62 @@
 <rakuscript>          ::= <statement>+
 
 <statement>           ::= <definition>
-                        | <gdscpript>
-                        | <charater-def>
+                        | <gdscript>
+                        | <character-def>
                         | <annotation>
                         | <comment>
                         | <line>
 
 <block>               ::= <statement> | <indent> <newline> <statement>+ <dedent>
 
-<comment>             ::= "#" .*
+<definition>           ::= "define" <ws> <change-var>
+
+<character-def>       ::= <character-base> <ws> <string>
+                        | <character-base> <ws> <character-key> <ws>
+                        | <character-base> <ws> "stats" <change-var>
+
+<character-base>      ::= "character" <ws> <var-name>
+
+<character-key>       ::= "name"
+                        | "avatar"
+                        | "color"
+                        | "kind"
+                        | "prefix"
+                        | "suffix"
+
+
+<gdscript>            ::= "gd:" <gdscript-block>
+
 
 <change-var>          ::= <var-name> <ws>? "=" <expression>
 
-<string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
+<var-name>            ::= <alpha> <digit>?
 
-<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "." <digit>+ )?
+<comment>             ::= "#" .*
+
+<while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
+
+<if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
+                            <else-if>? <else>?
+
+<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block> <else-if>?
+
+<else>                ::= "else" ("(")? ":" <block>
+
+
+<expression>          ::= <number>
+                        | <string>
+                        | <array>
+                        | <dictionary>
+                        | <boolean>
+
+
+<array>               ::= '[' <expression>? ']'
+
+<dictionary>          ::= '{' ('"'<var-name>'"': <expression> )? '}'
+
+
+<string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
 
 <unquoted-string>     ::= <non-rparen>* ( <backslash> . <non-rparen>* )*
 
@@ -29,6 +70,26 @@
 
 <non-squote>          ::= [^ "'" <backslash> ]
 
+
+<boolean-expression>  ::= <not>? <var-name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
+
+<boolean>             ::= "true" | "false" | <boolean-expression>
+
+<comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
+
+<not>                 ::= "!"|"not"
+
+<logic>               ::= "and" | "&&" | "or" | "||"
+
+
+<number>              ::= ( ( "+" | "-" ) <ws>? )? <digit>+ ( "." <digit>+ )?
+
+<alphanumeric>        ::= <alpha> | <digit>
+
+<digit>               ::= [ "0" - "9" ]
+
+<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
+
 <backslash>           ::= "\"
 
 <ws>                  ::= \s
@@ -39,56 +100,4 @@
 
 <dedent>              ::= EXTERNAL
 
-<alphanumeric>        ::= <alpha> | <digit>
-
-<var-name>            ::= <alpha> <digit>?
-
-<digit>               ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-
-<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
-
-<definition>          ::= "define" <ws> <change-var>
-
-<charater-def>        ::= <charater-base> <ws> <string>
-                        | <charater-base> <ws> <charater-key> <ws>
-                        | <charater-base> <ws> "stats" <change-var>
-
-<character-base>      ::= "charater" <ws> <var-name>
-
-<character-key>       ::= "name"
-                        | "avatar"
-                        | "color"
-                        | "kind"
-                        | "prefix"
-                        | "suffix"
-
-<gdscript>           ::= "gd:" <block>
-
-<array>               ::= '[' <expression>? ']'
-<dictionary>          ::= '{' ('"'<var_name>'"': <expression> )? '}'
-
-
-<expression>          ::= <number>
-                        | <string>
-                        | <array>
-                        | <dictionary>
-                        | <boolean>
-
-<boolean>             ::= "true" | "false" | <boolean-expression>
-
-<comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
-
-<not>                 ::= "!"|"not"
-
-<boolean-expression>  ::= <not>? <var_name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
-
-<logic>               ::= "and" | "&&" | "or" | "||"
-
-<while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
-
-<if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
-                            <else-if>? <else>?
-
-<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block> <else-if>?
-
-<else>                ::= "else" ("(")? ":" <block>
+<gdscript-block>      ::= EXTERNAL

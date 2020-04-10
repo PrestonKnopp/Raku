@@ -53,7 +53,10 @@
 
 <array>               ::= "[" <any-ws> ( <expression> ( <any-ws> "," <any-ws> <expression>? )? )* "]"
 
-<dictionary>          ::= '{' ('"'<var-name>'"': <expression> )? '}'
+<dictionary>          ::= "{" <any-ws> (<dictionary-item>* ( <any-ws> "," <any-ws> <dictionary-item>? )? )* "}"
+
+<dictionary-item>     ::= (<expression> " "* ":" " "* <expression>)
+                        | <change-var>
 
 
 <string>              ::= ('"' <non-dquote>* ( "\" . <non-dquote>* )* '"')

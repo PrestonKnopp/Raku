@@ -1,6 +1,4 @@
-<rakuscript>          ::= <block>
-
-<block>               ::= <statement> <block>?
+<rakuscript>          ::= <statement>+
 
 <statement>           ::= <definition>
                         | <gdscpript>
@@ -8,6 +6,8 @@
                         | <annotation>
                         | <comment>
                         | <line>
+
+<block>               ::= <statement> | <indent> <newline> <statement>+ <dedent>
 
 <comment>             ::= "#" .*
 
@@ -33,6 +33,12 @@
 
 <ws>                  ::= \s
 
+<newline>             ::= \n
+
+<indent>              ::= EXTERNAL
+
+<dedent>              ::= EXTERNAL
+
 <alphanumeric>        ::= <alpha> | <digit>
 
 <var-name>            ::= <alpha> <digit>?
@@ -56,7 +62,7 @@
                         | "prefix"
                         | "suffix"
 
-<gdscpript>           ::= "gd:" (<statement> | <block>)
+<gdscript>           ::= "gd:" <block>
 
 <array>               ::= '[' <expression>? ']'
 <dictionary>          ::= '{' ('"'<var_name>'"': <expression> )? '}'
@@ -83,7 +89,6 @@
 <if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
                             <else-if>? <else>?
 
-<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block>
-                            <block> "}" <else-if>?
+<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block> <else-if>?
 
 <else>                ::= "else" ("(")? ":" <block>

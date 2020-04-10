@@ -56,15 +56,8 @@
 <dictionary>          ::= '{' ('"'<var-name>'"': <expression> )? '}'
 
 
-<string>              ::= '"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"'
-
-<unquoted-string>     ::= <non-rparen>* ( <backslash> . <non-rparen>* )*
-
-<raw-expression>      ::= "'" <non-squote>* ( <backslash> . <non-squote>* )* "'"
-
-<non-rbrace>          ::= [^ "}" <backslash> ]
-
-<non-rparen>          ::= [^ ")" <backslash> ]
+<string>              ::= ('"' <non-dquote>* ( <backslash> . <non-dquote>* )* '"')
+                        | ("'" <non-squote>* ( <backslash> . <non-squote>* )* "'")
 
 <non-dquote>          ::= [^ '"' <backslash> ]
 

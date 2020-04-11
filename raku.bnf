@@ -7,7 +7,7 @@
                         | <comment>
                         | <line>
 
-<block>               ::= <statement> | <indent> <newline> <statement>+ <dedent>
+<block>               ::= <statement> | <newline> <indent> <statement>+ <dedent>
 
 <definition>           ::= "define" " " <change-var>
 

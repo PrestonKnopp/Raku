@@ -3,10 +3,12 @@ extends Reference
 enum Type {
 	BACK_SLASH, # \\
 	SLASH, # /
-	LEFT_PAREN, # (
-	RIGHT_PAREN, # )
-	LEFT_CURLY, # {
-	RIGHT_CURLY, # }
+	PAREN_OPEN, # (
+	PAREN_CLOSE, # )
+	CURLY_OPEN, # {
+	CURLY_CLOSE, # }
+	BRACK_OPEN, # [
+	BRACK_CLOSE, # ]
 	PLUS, # +
 	MINUS, # -
 	STAR, # *
@@ -30,7 +32,8 @@ enum Type {
 
 	COMMENT, # #...
 
-	STRING, # "..."
+	STRING_OPEN, # " | '
+	STRING_CLOSE, # " | '
 	INTEGER, # 0-9
 	FLOAT, # 0-9.0-9
 

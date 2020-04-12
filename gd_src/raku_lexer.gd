@@ -60,7 +60,7 @@ func lex_token() -> void:
 	elif c == '&' and check('&'): add_token(Token.Type.AND)
 	elif c == '|' and check('|'): add_token(Token.Type.OR)
 	elif c == '#': comment()
-	elif c == '"' or c == "'": string()
+	elif c == '"' or c == "'": string(c)
 	elif c == '\n': newline()
 	elif c == '\r': pass
 	else:
@@ -91,8 +91,24 @@ func comment() -> void:
 		advance()
 	add_token(Token.Type.COMMENT)
 
-func string() -> void:
-	pass
+func string(open_quote: String) -> void:
+	var c: String
+	var no_closing_quote: bool = true
+	while not eof():
+		c = advance()
+		if c == open_quote:
+			no_closing_quote = false
+			break
+		elif c == '\\' and check(open_quote):
+			pass
+		elif c == '\n':
+			line += 1
+			column = 0
+
+	if no_closing_quote:
+		error('Unterminated string.')
+	add_token(Token.Type.STRING_CONTENT)
+
 
 func newline() -> void:
 	line += 1

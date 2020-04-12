@@ -32,8 +32,10 @@ enum Type {
 
 	COMMENT, # #...
 
-	STRING_OPEN, # " | '
-	STRING_CLOSE, # " | '
+	# It may be preferable to lex string contents.
+	# STRING_OPEN, # " or '
+	# STRING_CLOSE, # " or '
+	STRING_CONTENT, # "..." or '...'
 	INTEGER, # 0-9
 	FLOAT, # 0-9.0-9
 

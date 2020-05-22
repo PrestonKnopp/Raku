@@ -161,7 +161,7 @@ TODO
 
 ```
 func example(%sym pos1 pos2 {named1 named2 ...rest_named} ...rest_pos):
-	print "Symbol <[%sym]>"
+	print "Symbol [sym]"
 	print "Positional Args [pos1] [pos2]"
 	print "Named Args [named1] [named2]"
 	for pos in rest_pos:
@@ -194,7 +194,7 @@ example(MySymbol "one" 2, named1 = "none" named2 = 3, 4 5, r=100 g=200 b=100)
 The two `example` calls print:
 
 ```
-Symbol <MySymbol>
+Symbol MySymbol
 Positional Args one 2
 Named Args none 3
 Rest Pos 4

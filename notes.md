@@ -1,6 +1,5 @@
 # Raku Notes
 
-- All function statements can be called without parentheses
 - Dictionary field syntax should match GDScript
   - Map symbol to value. `key = value` == `dict["key"] = value`
   - Map expr result to value. `key: value` == `dict[key] = value`
@@ -165,7 +164,7 @@ func example(%sym pos1 pos2 {named1 named2 ...rest_named} ...rest_pos):
 
 A function call **statement** can be called **without parentheses**.
 Function arguments can be separated by spaces and specified on multiple lines
-with indentation.
+with indentation. Function call **expressions** must use parentheses.
 
 ```
 example MySymbol "one" 2
@@ -173,6 +172,9 @@ example MySymbol "one" 2
 	named2=3
 	4 5
 	r=100 g=200 b=100
+
+# parentheses are required for other_func()
+take_result other_func()
 ```
 
 Commas are optional and can be interspersed between arguments.

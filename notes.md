@@ -1,3 +1,17 @@
+<!-- TOC -->
+
+- [Raku Notes](#raku-notes)
+  - [Keywords](#keywords)
+  - [Commas](#commas)
+  - [Accessing GDScript](#accessing-gdscript)
+  - [Strings](#strings)
+  - [String Interpolation](#string-interpolation)
+  - [Function Syntax](#function-syntax)
+    - [`define` Function Example](#define-function-example)
+    - [Symbol](#symbol)
+
+<!-- /TOC -->
+
 # Raku Notes
 
 - Dictionary field syntax should match GDScript

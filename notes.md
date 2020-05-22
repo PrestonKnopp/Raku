@@ -19,14 +19,22 @@ gd
 
 ## Commas
 
-Commas are optional in all list contexts. They can be interspersed between list
-elements.
+Commas are optional for arrays, dictionaries, arguments, and parameters. They
+can be interspersed between elements.
+
+```
+[1 2 3 4 5]
+{a = 1 b = 2 c = 3}
+func hello(one two three)
+hello one two three
+hello(one two three)
+```
 
 When commas are present they are not ignored. The following is invalid:
 
 ```
 [ 1 2 , , 4 5]
-	        ^ error: unexpected comma
+	      ^ error: Expected expression following comma.
 ```
 
 However, an extra comma at the end of a list is allowed:

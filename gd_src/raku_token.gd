@@ -39,12 +39,13 @@ enum Type {
 	INTEGER, # 0-9
 	FLOAT, # 0-9.0-9
 
-	IDENT, # an identifier
-	DEFINE, # define
+	IDENTIFIER, # hello_1
 	IF, # if
 	ELIF, # elif
 	ELSE, # else
 	WHILE, # while
+	FOR, # for
+	IN, # in
 	TRUE, # true
 	FALSE, # false
 
@@ -52,26 +53,42 @@ enum Type {
 }
 
 var type: int
-var line: int
-var column: int
+var start_line: int
+var end_line: int
+var start_column: int
+var end_column: int
 var start: int
 var end: int
 
 var literal
 
-func _init(p_type: int, p_line: int, p_column: int, p_start: int, p_end: int, p_literal):
+func _init(p_type: int, p_start_line: int, p_start_column: int, p_end_line: int,
+		p_end_column: int, p_start: int, p_end: int, p_literal):
 	type = p_type
-	line = p_line
-	column = p_column
+	start_line = p_start_line
+	start_column = p_start_column
+	end_line = p_end_line
+	end_column = p_end_column
 	start = p_start
 	end = p_end
 	literal = p_literal
 
-func _to_string() -> String:
-	return get_to_string_fmt() % [get_type_name(), line, column, start, end, literal]
+func equals(other) -> bool:
+	return (
+		other is (get_script() as Script) and
+		type == other.type and
+		start_line == other.start_line and
+		end_line == other.end_line and
+		start_column == other.start_column and
+		end_column == other.end_column and
+		start == other.start and
+		end == other.end
+	)
 
-func get_to_string_fmt() -> String:
-	return '(%s %s:%s, %s-%s, %s)'
+func _to_string() -> String:
+	var format = '(%s %s:%s-%s:%s, %s-%s, %s)'
+	return format % [get_type_name(), start_line, start_column, end_line,
+			end_column, start, end, literal]
 
 func get_type_name() -> String:
 	var idx: int = Type.values().find(type)

@@ -21,14 +21,20 @@
 ## Keywords
 
 ```
-true false
-pass
-if elif else unless
+true false and or not
+pass end
+if elif else
 while for in
-set
-func var
+func var const
 menu
 gd
+```
+
+## Operators
+
+```
+== != < <= > >=
+- + * / %
 ```
 
 ## Commas
@@ -42,13 +48,14 @@ can be interspersed between elements.
 func hello(one two three)
 hello one two three
 hello(one two three)
+hello one1 one2, two1 two2
 ```
 
 When commas are present they are not ignored. The following is invalid:
 
 ```
 [ 1 2 , , 4 5]
-	      ^ error: Expected expression following comma.
+        ^ error: Expected expression following comma.
 ```
 
 However, an extra comma at the end of a list is allowed:
@@ -73,9 +80,9 @@ Access gdscript directly with `gd:`.
 - blockwise
 
 ```
-	gd:
-		your gdscript block
-		your gdscript block
+gd:
+	your gdscript block
+	your gdscript block
 ```
 
 The following are valid examples:

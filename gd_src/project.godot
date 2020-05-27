@@ -17,6 +17,10 @@ _global_script_class_icons={
 
 config/name="raku parser"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "gut" )
+
 [rendering]
 
 quality/driver/driver_name="GLES2"

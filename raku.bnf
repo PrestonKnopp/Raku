@@ -1,23 +1,23 @@
-<rakuscript>          ::= <statement>+
+rakuscript          ::= statement+
 
-<statement>           ::= <definition>
-                        | <gdscript>
-                        | <character-def>
-                        | <annotation>
-                        | <comment>
-                        | <line>
+statement           ::= definition
+                        | gdscript
+                        | character-def
+                        | annotation
+                        | comment
+                        | line
 
-<block>               ::= <statement> | <newline> <indent> <statement>+ <dedent>
+block               ::= statement | newline indent statement+ dedent
 
-<definition>           ::= "define" " " <change-var>
+definition           ::= "define" " " change-var
 
-<character-def>       ::= <character-base> " " <string>
-                        | <character-base> " " <character-key> " "
-                        | <character-base> " " "stats" <change-var>
+character-def       ::= character-base " " string
+                        | character-base " " character-key " "
+                        | character-base " " "stats" change-var
 
-<character-base>      ::= "character" " " <var-name>
+character-base      ::= "character" " " var-name
 
-<character-key>       ::= "name"
+character-key       ::= "name"
                         | "avatar"
                         | "color"
                         | "kind"
@@ -25,75 +25,75 @@
                         | "suffix"
 
 
-<gdscript>            ::= "gd:" <gdscript-block>
+gdscript            ::= "gd:" gdscript-block
 
 
-<change-var>          ::= <var-name> " "? "=" <expression>
+change-var          ::= var-name " "? "=" expression
 
-<var-name>            ::= <alpha> <digit>?
+var-name            ::= alpha digit?
 
-<comment>             ::= "#" .*
+comment             ::= "#" .*
 
-<while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
+while               ::= "while" ("(")?  boolean-expression (")")? ":" block
 
-<if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
-                            <else-if>? <else>?
+if                  ::= "if" ("(")? boolean-expression ")" (")")? ":" block
+                            else-if? else?
 
-<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block> <else-if>?
+else-if             ::= "elif" ("(")? boolean-expression ")" ":" block else-if?
 
-<else>                ::= "else" ("(")? ":" <block>
-
-
-<expression>          ::= <number>
-                        | <string>
-                        | <array>
-                        | <dictionary>
-                        | <boolean>
+else                ::= "else" ("(")? ":" block
 
 
-<array>               ::= "[" <any-ws> ( <expression> ( <any-ws> "," <any-ws> <expression>? )? )* "]"
-
-<dictionary>          ::= "{" <any-ws> (<dictionary-item>* ( <any-ws> "," <any-ws> <dictionary-item>? )? )* "}"
-
-<dictionary-item>     ::= (<expression> " "* ":" " "* <expression>)
-                        | <change-var>
-
-
-<string>              ::= ('"' <non-dquote>* ( "\" . <non-dquote>* )* '"')
-                        | ("'" <non-squote>* ( "\" . <non-squote>* )* "'")
-
-<non-dquote>          ::= [^ '"' "\" ]
-
-<non-squote>          ::= [^ "'" "\" ]
+expression          ::= number
+                        | string
+                        | array
+                        | dictionary
+                        | boolean
 
 
-<boolean-expression>  ::= <not>? <var-name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
+array               ::= "[" any-ws ( expression ( any-ws "," any-ws expression? )? )* "]"
 
-<boolean>             ::= "true" | "false" | <boolean-expression>
+dictionary          ::= "{" any-ws (dictionary-item* ( any-ws "," any-ws dictionary-item? )? )* "}"
 
-<comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
-
-<not>                 ::= "!"|"not"
-
-<logic>               ::= "and" | "&&" | "or" | "||"
+dictionary-item     ::= (expression " "* ":" " "* expression)
+                        | change-var
 
 
-<number>              ::= ( ( "+" | "-" ) " "? )? <digit>+ ( "." <digit>+ )?
+string              ::= ('"' non-dquote* ( "\" . non-dquote* )* '"')
+                        | ("'" non-squote* ( "\" . non-squote* )* "'")
 
-<alphanumeric>        ::= <alpha> | <digit>
+non-dquote          ::= [^ '"' "\" ]
 
-<digit>               ::= [ "0" - "9" ]
+non-squote          ::= [^ "'" "\" ]
 
-<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
 
-<any-ws>              ::= [ " " <tab> <newline> ]*
+boolean-expression  ::= not? var-name (comparison not? expression ( logic boolean-expression)? )
 
-<tab>                 ::= \t
+boolean             ::= "true" | "false" | boolean-expression
 
-<newline>             ::= \n
+comparison          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
 
-<indent>              ::= EXTERNAL
+not                 ::= "!"|"not"
 
-<dedent>              ::= EXTERNAL
+logic               ::= "and" | "&&" | "or" | "||"
 
-<gdscript-block>      ::= EXTERNAL
+
+number              ::= ( ( "+" | "-" ) " "? )? digit+ ( "." digit+ )?
+
+alphanumeric        ::= alpha | digit
+
+digit               ::= [ "0" - "9" ]
+
+alpha               ::= [ "A" - "Z" "a" - "z" "_" ]
+
+any-ws              ::= [ " " tab newline ]*
+
+tab                 ::= \t
+
+newline             ::= \n
+
+indent              ::= EXTERNAL
+
+dedent              ::= EXTERNAL
+
+gdscript-block      ::= EXTERNAL

@@ -1,3 +1,5 @@
+# TOC
+
 <!-- TOC -->
 
 - [Raku Notes](#raku-notes)
@@ -9,6 +11,7 @@
   - [Function Syntax](#function-syntax)
     - [`define` Function Example](#define-function-example)
     - [Symbol](#symbol)
+  - [Signals](#signals)
 
 <!-- /TOC -->
 
@@ -272,4 +275,32 @@ func show(%...parts):
 
 show eva smile
 show bg lecturehall
+```
+
+## Signals
+
+Signals are declared exactly like they are in GDScript.
+
+```
+signal my_signal(one, two)
+```
+
+But connecting signals has some sugar on top.
+
+```
+@my_signal
+func on_my_signal(one, two):
+	pass
+```
+
+The above would expand to
+
+```
+signal my_signal(one, two)
+
+func _init():
+	connect('my_signal', self, 'on_my_signal')
+
+func on_my_signal(one, two):
+	pass
 ```

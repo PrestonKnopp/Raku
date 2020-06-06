@@ -19,27 +19,25 @@
 
 rakuscript          ::= statement+
 
-statement           ::= definition
-                      | comment
+block               ::= statement
+                      | newline indent statement+ dedent
 
-block               ::= statement | newline indent statement+ dedent
+statement           ::= comment
+                      | while | for | if
+                      | gdscript
 
 gdscript            ::= "gd:" gdscript-block
 
-change-var          ::= var-name " "? "=" expression
 
-var-name            ::= alpha digit?
+while               ::= "while" logic-expression ":" block
 
-comment             ::= "#" .*
+for                 ::= "for" identifier "in" expression ":" block
 
-while               ::= "while" ("(")?  logic-expression (")")? ":" block
+if                  ::= "if" logic-expression ":" block elif? else?
 
-if                  ::= "if" ("(")? logic-expression ")" (")")? ":" block
-                            else-if? else?
+elif                 ::= "elif" logic-expression ":" block elif?
 
-else-if             ::= "elif" ("(")? logic-expression ")" ":" block else-if?
-
-else                ::= "else" ("(")? ":" block
+else                ::= "else" ":" block
 
 
 expression          ::= number

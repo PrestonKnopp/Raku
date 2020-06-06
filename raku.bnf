@@ -50,13 +50,12 @@ expression          ::= number
                       | math-expression
 
 
-array               ::= "[" any-ws ( expression ( any-ws "," any-ws expression? )? )* "]"
+array               ::= "[" (expression ","?)* "]"
 
-dictionary          ::= "{" any-ws (dictionary-item* ( any-ws "," any-ws dictionary-item? )? )* "}"
+dictionary          ::= "{" (dictionary-item ","?)* "}"
 
-dictionary-item     ::= (expression " "* ":" " "* expression)
-                      | change-var
-
+dictionary-item     ::= expression ":" expression
+                      | identifier "=" expression
 
 // Referenced: https://docs.python.org/3/reference/grammar.html
 
@@ -93,6 +92,9 @@ any-ws              ::= [ " " tab newline ]*
 tab                 ::= \t
 
 newline             ::= \n
+
+
+identifier          ::= EXTERNAL
 
 indent              ::= EXTERNAL
 

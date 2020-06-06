@@ -1,32 +1,11 @@
 rakuscript          ::= statement+
 
 statement           ::= definition
-                        | gdscript
-                        | character-def
-                        | annotation
-                        | comment
-                        | line
+                      | comment
 
 block               ::= statement | newline indent statement+ dedent
 
-definition           ::= "define" " " change-var
-
-character-def       ::= character-base " " string
-                        | character-base " " character-key " "
-                        | character-base " " "stats" change-var
-
-character-base      ::= "character" " " var-name
-
-character-key       ::= "name"
-                        | "avatar"
-                        | "color"
-                        | "kind"
-                        | "prefix"
-                        | "suffix"
-
-
 gdscript            ::= "gd:" gdscript-block
-
 
 change-var          ::= var-name " "? "=" expression
 
@@ -34,21 +13,22 @@ var-name            ::= alpha digit?
 
 comment             ::= "#" .*
 
-while               ::= "while" ("(")?  boolean-expression (")")? ":" block
+while               ::= "while" ("(")?  logic-expression (")")? ":" block
 
-if                  ::= "if" ("(")? boolean-expression ")" (")")? ":" block
+if                  ::= "if" ("(")? logic-expression ")" (")")? ":" block
                             else-if? else?
 
-else-if             ::= "elif" ("(")? boolean-expression ")" ":" block else-if?
+else-if             ::= "elif" ("(")? logic-expression ")" ":" block else-if?
 
 else                ::= "else" ("(")? ":" block
 
 
 expression          ::= number
-                        | string
-                        | array
-                        | dictionary
-                        | boolean
+                      | string
+                      | array
+                      | dictionary
+                      | logic-expression
+                      | math-expression
 
 
 array               ::= "[" any-ws ( expression ( any-ws "," any-ws expression? )? )* "]"
@@ -56,29 +36,32 @@ array               ::= "[" any-ws ( expression ( any-ws "," any-ws expression? 
 dictionary          ::= "{" any-ws (dictionary-item* ( any-ws "," any-ws dictionary-item? )? )* "}"
 
 dictionary-item     ::= (expression " "* ":" " "* expression)
-                        | change-var
+                      | change-var
 
 
-string              ::= ('"' non-dquote* ( "\" . non-dquote* )* '"')
-                        | ("'" non-squote* ( "\" . non-squote* )* "'")
+// Referenced: https://docs.python.org/3/reference/grammar.html
 
-non-dquote          ::= [^ '"' "\" ]
+logic-expression    ::= logic_or
 
-non-squote          ::= [^ "'" "\" ]
+logic_or            ::= logic_and ("or" | "||" logic_and)*
 
+logic_and           ::= logic_not ("and" | "&&" logic_not)*
 
-boolean-expression  ::= not? var-name (comparison not? expression ( logic boolean-expression)? )
+logic_not           ::= ("not" | "!") logic_not | comparison
 
-boolean             ::= "true" | "false" | boolean-expression
+comparison          ::= expression (comparison-op expression)*
 
-comparison          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
-
-not                 ::= "!"|"not"
-
-logic               ::= "and" | "&&" | "or" | "||"
+comparison-op       ::= "==" | ">" | ">=" | "<" | "<=" | "!="
 
 
-number              ::= ( ( "+" | "-" ) " "? )? digit+ ( "." digit+ )?
+math-expression     ::= math-term ("+" | "-" math-term)*
+
+math-term           ::= math-factor ("*" | "/" | "%" math-factor)*
+
+math-factor         ::= ("+" | "-") math-factor | expression
+
+
+number              ::= digit+ ( "." digit+ )?
 
 alphanumeric        ::= alpha | digit
 

@@ -25,6 +25,7 @@ block               ::= statement
 statement           ::= comment
                       | while | for | if
                       | gdscript
+                      | func-call-statement
 
 gdscript            ::= "gd:" gdscript-block
 
@@ -46,6 +47,13 @@ expression          ::= number
                       | dictionary
                       | logic-expression
                       | math-expression
+                      | func-call
+
+
+func-call           ::= identifier "(" (expression ","?)* ")"
+
+func-call-stmt      ::= func-call
+                      | identifier (expression ","?)*
 
 
 array               ::= "[" (expression ","?)* "]"

@@ -77,19 +77,16 @@ math-term           ::= math-factor ("*" | "/" | "%" math-factor)*
 math-factor         ::= ("+" | "-") math-factor | expression
 
 
+string              ::= single-quote-string | double-quote-string
+single-quote-string ::= "'" .* "'"
+double-quote-string ::= '"' .* '"'
+
+
+comment             ::= "#" .*
+
 number              ::= digit+ ( "." digit+ )?
 
-alphanumeric        ::= alpha | digit
-
 digit               ::= [ "0" - "9" ]
-
-alpha               ::= [ "A" - "Z" "a" - "z" "_" ]
-
-any-ws              ::= [ " " tab newline ]*
-
-tab                 ::= \t
-
-newline             ::= \n
 
 
 identifier          ::= EXTERNAL

@@ -1,3 +1,22 @@
+// Grammar Syntax
+// ---------------
+//
+// *    0 or more
+// +    1 or more
+// ?    0 or 1
+// .    any char
+// ()   group
+// []   one of char
+// ""   literal char
+// -    char range
+// |    or              Only applies to adjacent symbols. E.g.
+//                      "a" | "b" "c"  reads as ("a" | "b") "c"
+//                      Multi-line or's are by line. E.g.
+//                      "a"
+//                      | "b" "c"
+//                      reads as "a" | ("b" "c")
+
+
 rakuscript          ::= statement+
 
 statement           ::= definition

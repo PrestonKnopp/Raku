@@ -15,6 +15,13 @@
 //                      "a"
 //                      | "b" "c"
 //                      reads as "a" | ("b" "c")
+//
+// Todo
+// ----
+//
+// - Add assign operators.
+// - Add function definition statements.
+// - Add function call named arguments.
 
 
 rakuscript          ::= statement+

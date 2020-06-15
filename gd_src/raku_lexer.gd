@@ -78,12 +78,12 @@ func _lex_token() -> void:
 	elif c == '-': _add_token(Token.Type.MINUS)
 	elif c == '*': _add_token(Token.Type.STAR)
 	elif c == ':': _add_token(Token.Type.COLON)
-	elif c == '=': _add_token(Token.Type.EQUAL_EQUAL if _check('=') else Token.Type.EQUAL)
-	elif c == '>': _add_token(Token.Type.GREATER_THAN_EQUAL if _check('=') else Token.Type.GREATER_THAN)
-	elif c == '<': _add_token(Token.Type.LESS_THAN_EQUAL if _check('=') else Token.Type.LESS_THAN)
-	elif c == '!': _add_token(Token.Type.NOT_EQUAL if _check('=') else Token.Type.NOT)
-	elif c == '&' and _check('&'): _add_token(Token.Type.AND)
-	elif c == '|' and _check('|'): _add_token(Token.Type.OR)
+	elif c == '=': _add_token(Token.Type.EQUAL_EQUAL if _match('=') else Token.Type.EQUAL)
+	elif c == '>': _add_token(Token.Type.GREATER_THAN_EQUAL if _match('=') else Token.Type.GREATER_THAN)
+	elif c == '<': _add_token(Token.Type.LESS_THAN_EQUAL if _match('=') else Token.Type.LESS_THAN)
+	elif c == '!': _add_token(Token.Type.NOT_EQUAL if _match('=') else Token.Type.NOT)
+	elif c == '&' and _match('&'): _add_token(Token.Type.AND)
+	elif c == '|' and _match('|'): _add_token(Token.Type.OR)
 	elif c == '#': _comment()
 	elif c == '"' or c == "'": _string(c)
 	elif c.is_valid_integer(): _number()
@@ -107,7 +107,7 @@ func _advance() -> String:
 func _peek() -> String:
 	return '' if _eof() else source[_idx]
 
-func _check(c: String) -> bool:
+func _match(c: String) -> bool:
 	if _eof(): return false
 	if source[_idx] != c: return false
 
@@ -123,7 +123,7 @@ func _number() -> void:
 	while _peek().is_valid_integer():
 		_consume()
 
-	if _check('.'):
+	if _match('.'):
 		if not _peek().is_valid_integer():
 			_error('Numbers cannot end with a ".".')
 		
@@ -161,7 +161,7 @@ func _string(open_quote: String) -> void:
 		if c == open_quote:
 			no_closing_quote = false
 			break
-		elif c == '\\' and _check(open_quote):
+		elif c == '\\' and _match(open_quote):
 			pass
 		elif c == '\n':
 			_line += 1
@@ -192,7 +192,7 @@ func _newline() -> void:
 		_start_idx = _idx
 		_start_column = _column
 		_start_line = _line
-		while _check(' '): pass
+		while _match(' '): pass
 		if _start_idx != _idx:
 			_add_token(Token.Type.SPACE_INDENT, _idx - _start_idx)
 
@@ -200,7 +200,7 @@ func _newline() -> void:
 		_start_idx = _idx
 		_start_column = _column
 		_start_line = _line
-		while _check('\t'): pass
+		while _match('\t'): pass
 		if _start_idx != _idx:
 			_add_token(Token.Type.TAB_INDENT, _idx - _start_idx)
 

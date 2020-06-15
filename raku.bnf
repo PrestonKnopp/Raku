@@ -36,9 +36,7 @@ stmt                ::= comment
                       | gd
                       | fn_call_stmt
 
-
 gd                  ::= "gd:" gd_block
-
 
 while               ::= "while" logic_expr ":" block
 for                 ::= "for" ident "in" expr ":" block
@@ -47,49 +45,52 @@ if                  ::= "if" logic_expr ":" block elif? else?
 elif                ::= "elif" logic_expr ":" block elif?
 else                ::= "else" ":" block
 
-
-expr                ::= number
-                      | string
-                      | array
-                      | dict
-                      | logic_expr
-                      | math_expr
-                      | fn_call
-
-
-fn_call             ::= ident "(" (expr ","?)* ")"
 fn_call_stmt        ::= fn_call
-                      | ident (expr ","?)*
-
-
-array               ::= "[" (expr ","?)* "]"
-
-dict                ::= "{" (dict_item ","?)* "}"
-dict_item           ::= expr ":" expr
-                      | ident "=" expr
+                      | attr (expr ","?)*
 
 # Referenced: https://docs.python.org/3/reference/grammar.html
+
+expr                ::= logic_expr
 
 logic_expr          ::= logic_or
 logic_or            ::= logic_and ("or" | "||" logic_and)*
 logic_and           ::= logic_not ("and" | "&&" logic_not)*
-logic_not           ::= ("not" | "!") logic_not | cmp
+logic_not           ::= (("not" | "!") logic_not) | cmp
 
-cmp                 ::= expr (cmp_op expr)*
+cmp                 ::= math_expr (cmp_op math_expr)*
 cmp_op              ::= "==" | ">" | ">=" | "<" | "<=" | "!="
 
-math_expr           ::= math_term ("+" | "_" math_term)*
+math_expr           ::= math_term ("+" | "-" math_term)*
 math_term           ::= math_factor ("*" | "/" | "%" math_factor)*
-math_factor         ::= ("+" | "_") math_factor | expr
+math_factor         ::= ("+" | "-") math_factor | fn_call
 
+fn_call             ::= attr "(" (expr ","?)* ")"
+attr                ::= subscript ("." ident)*
+subscript           ::= primary "[" expr "]"
+
+primary             ::= "true"
+                      | "false"
+                      | "null"
+                      | array
+                      | dict
+                      | str
+                      | number
+                      | ident
+                      | "(" expr ")"
+
+array               ::= "[" (expr ","?)* "]"
+dict                ::= "{" (dict_item ","?)* "}"
+dict_item           ::= expr ":" expr
+                      | ident "=" expr
 
 str                 ::= sq_str | dq_str
 sq_str              ::= "'" .* "'"
 dq_str              ::= '"' .* '"'
 
-comment             ::= "#" .*
 number              ::= digit+ ( "." digit+ )?
 digit               ::= [ "0" - "9" ]
+
+comment             ::= "#" .*
 
 ident               ::= EXTERNAL
 indent              ::= EXTERNAL

@@ -24,6 +24,14 @@
 # - function call named arguments
 # - pass stmt
 # - atoms, true false
+#
+# References
+# ----------
+#
+# https://docs.python.org/3/reference/grammar.html
+# https://docs.godotengine.org/en/stable/development/file_formats/gdscript_grammar.html
+# https://docs.godotengine.org/en/stable/getting_started/scripting/gdscript/gdscript_basics.html?#operators
+
 
 
 rakuscript          ::= stmt+
@@ -48,7 +56,6 @@ else                ::= "else" ":" block
 fn_call_stmt        ::= fn_call
                       | attr (expr ","?)*
 
-# Referenced: https://docs.python.org/3/reference/grammar.html
 
 expr                ::= logic_expr
 

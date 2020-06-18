@@ -78,14 +78,14 @@ subscript           ::= primary "[" expr "]"
 primary             ::= "true"
                       | "false"
                       | "null"
-                      | array
+                      | list
                       | dict
                       | str
                       | number
                       | ident
                       | "(" expr ")"
 
-array               ::= "[" (expr ","?)* "]"
+list                ::= "[" (expr ","?)* "]"
 dict                ::= "{" (dict_item ","?)* "}"
 dict_item           ::= expr ":" expr
                       | ident "=" expr

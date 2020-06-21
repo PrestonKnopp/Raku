@@ -1,5 +1,5 @@
 # raku_ast.gd
-# ------------------
+# -----------
 
 class Ast:
 	extends Reference

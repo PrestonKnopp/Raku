@@ -1,23 +1,26 @@
 # raku_ast_visitors.gd
-# ---------------------------
+# --------------------
 
 class Visitor:
-	var Tree = load('res://raku_ast.gd')
+	var Ast = load('res://raku_ast.gd')
+	var Token = load('res://raku_token.gd')
 	func visit(ast):
 		var s = self
-		if ast is Tree.Literal:
+		if ast is Ast.Literal:
 			return s.visitLiteral(ast)
-		elif ast is Tree.Unary:
+		elif ast is Ast.Unary:
 			return s.visitUnary(ast)
-		elif ast is Tree.Binary:
+		elif ast is Ast.Binary:
 			return s.visitBinary(ast)
+		elif ast is Token:
+			return s.visitToken(ast)
 		else:
-			return str(ast)
+			return ast
 
 class FuncStyleFormatter extends Visitor:
 
 	func funcify(caller, args=[]):
-		var s = '' + str(caller)
+		var s = str(visit(caller))
 		if args.size() > 0:
 			s += '('
 			var arg_strs = PoolStringArray([])
@@ -36,3 +39,6 @@ class FuncStyleFormatter extends Visitor:
 	
 	func visitBinary(e):
 		return funcify(e.op, [e.left, e.right])
+
+	func visitToken(e):
+		return e.get_type_name().to_lower()

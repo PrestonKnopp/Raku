@@ -1,5 +1,9 @@
-# raku_ast.gd
-# -----------
+
+# ------------------------------------------------------------------------------
+#                               Generated Code Below
+# ------------------------------------------------------------------------------
+#
+# See tools/generate_ast_classes.gd.
 
 class Ast:
 	extends Reference
@@ -8,89 +12,122 @@ class Ast:
 class Expr:
 	extends Ast
 
-class Literal extends Expr:
-	var token
-	func _init(t):
-		token = t
-
-class Unary extends Expr:
-	var op
-	var right
-	func _init(o,r):
-		op = o
-		right = r
-
-class Binary extends Expr:
-	var left
-	var op
-	var right
-	func _init(l,o,r):
-		left = l
-		op = o
-		right = r
-
-class List extends Expr:
-	var exprs
-	func _init(e=[]):
-		exprs = e
-
-class Dict extends Expr:
-	var items
-	func _init(i=[]):
-		items = i
-
-class DictItem extends Expr:
-	var left
-	var right
-	func _init(l,r):
-		left = l
-		right = r
-
-
-class Block extends Ast:
-	var stmts
-	func _init(s):
-		stmts = s
 
 class Stmt:
 	extends Ast
 
+
+class Literal extends Expr:
+	var token = null
+	func _init(p_token=null):
+		token = p_token
+	func accept(visitor): visitor.visitLiteral(self)
+
+
+class Unary extends Expr:
+	var op = null
+	var right = null
+	func _init(p_op=null,p_right=null):
+		op = p_op
+		right = p_right
+	func accept(visitor): visitor.visitUnary(self)
+
+
+class Binary extends Expr:
+	var left = null
+	var op = null
+	var right = null
+	func _init(p_left=null,p_op=null,p_right=null):
+		left = p_left
+		op = p_op
+		right = p_right
+	func accept(visitor): visitor.visitBinary(self)
+
+
+class List extends Expr:
+	var exprs = []
+	func _init(p_exprs=null):
+		if p_exprs != null: exprs = p_exprs
+	func accept(visitor): visitor.visitList(self)
+
+
+class Dict extends Expr:
+	var items = []
+	func _init(p_items=null):
+		if p_items != null: items = p_items
+	func accept(visitor): visitor.visitDict(self)
+
+
+class DictItem extends Expr:
+	var left = null
+	var right = null
+	func _init(p_left=null,p_right=null):
+		left = p_left
+		right = p_right
+	func accept(visitor): visitor.visitDictItem(self)
+
+
+class Block extends Ast:
+	var stmts = []
+	func _init(p_stmts=null):
+		if p_stmts != null: stmts = p_stmts
+	func accept(visitor): visitor.visitBlock(self)
+
+
 class While extends Stmt:
-	var expr
-	var block
-	func _init(e,b):
-		expr = e
-		block = b
+	var expr = null
+	var block = null
+	func _init(p_expr=null,p_block=null):
+		expr = p_expr
+		block = p_block
+	func accept(visitor): visitor.visitWhile(self)
+
 
 class For extends Stmt:
-	var ident
-	var expr
-	var block
-	func _init(i,e,b):
-		ident = i
-		expr = e
-		block = b
+	var ident = null
+	var expr = null
+	var block = null
+	func _init(p_ident=null,p_expr=null,p_block=null):
+		ident = p_ident
+		expr = p_expr
+		block = p_block
+	func accept(visitor): visitor.visitFor(self)
+
 
 class If extends Stmt:
-	var expr
-	var block
-	var else_if
-	var else_
-	func _init(e,b,ei,e_):
-		expr = e
-		block = b
-		else_if = ei
-		else_ = e_
+	var expr = null
+	var block = null
+	var else_if = null
+	var else_ = null
+	func _init(p_expr=null,p_block=null,p_else_if=null,p_else_=null):
+		expr = p_expr
+		block = p_block
+		else_if = p_else_if
+		else_ = p_else_
+	func accept(visitor): visitor.visitIf(self)
 
-class ElseIf:
-	extends If
+
+class ElseIf extends Stmt:
+	var expr = null
+	var block = null
+	var else_if = null
+	func _init(p_expr=null,p_block=null,p_else_if=null):
+		expr = p_expr
+		block = p_block
+		else_if = p_else_if
+	func accept(visitor): visitor.visitElseIf(self)
+
 
 class Else extends Stmt:
-	var block
-	func _init(b):
-		block = b
+	var block = null
+	func _init(p_block=null):
+		block = p_block
+	func accept(visitor): visitor.visitElse(self)
+
 
 class Gd extends Stmt:
-	var block
-	func _init(b):
-		block = b
+	var block = null
+	func _init(p_block=null):
+		block = p_block
+	func accept(visitor): visitor.visitGd(self)
+

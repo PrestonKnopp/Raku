@@ -26,4 +26,4 @@ func test_func_style_printer():
 		)
 	)
 
-	print(Visitors.FuncStyleFormatter.new().visit(tree))
+	print(tree.accept(Visitors.FuncStyleFormatter.new()))

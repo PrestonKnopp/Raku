@@ -91,13 +91,12 @@ func mk(p_name, extend, props_str):
 			fn_init_block.append('\tif p_%s != null: %s = p_%s' % [name, name, name])
 	
 
-	var fn_init = 'func _init(%s):' % fn_init_params.join(',')
-	block.append(fn_init)
+	block.append('func _init(%s):' % fn_init_params.join(','))
 	block.append_array(fn_init_block)
 
 
-	var fn_accept = 'func accept(visitor): visitor.visit%s(self)' % p_name
-	block.append(fn_accept)
+	block.append('func accept(visitor):')
+	block.append('\treturn visitor.visit%s(self)' % p_name)
 
 
 	clazz(p_name, extend, block)

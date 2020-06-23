@@ -21,7 +21,8 @@ class Literal extends Expr:
 	var token = null
 	func _init(p_token=null):
 		token = p_token
-	func accept(visitor): visitor.visitLiteral(self)
+	func accept(visitor):
+		return visitor.visitLiteral(self)
 
 
 class Unary extends Expr:
@@ -30,7 +31,8 @@ class Unary extends Expr:
 	func _init(p_op=null,p_right=null):
 		op = p_op
 		right = p_right
-	func accept(visitor): visitor.visitUnary(self)
+	func accept(visitor):
+		return visitor.visitUnary(self)
 
 
 class Binary extends Expr:
@@ -41,21 +43,24 @@ class Binary extends Expr:
 		left = p_left
 		op = p_op
 		right = p_right
-	func accept(visitor): visitor.visitBinary(self)
+	func accept(visitor):
+		return visitor.visitBinary(self)
 
 
 class List extends Expr:
 	var exprs = []
 	func _init(p_exprs=null):
 		if p_exprs != null: exprs = p_exprs
-	func accept(visitor): visitor.visitList(self)
+	func accept(visitor):
+		return visitor.visitList(self)
 
 
 class Dict extends Expr:
 	var items = []
 	func _init(p_items=null):
 		if p_items != null: items = p_items
-	func accept(visitor): visitor.visitDict(self)
+	func accept(visitor):
+		return visitor.visitDict(self)
 
 
 class DictItem extends Expr:
@@ -64,14 +69,16 @@ class DictItem extends Expr:
 	func _init(p_left=null,p_right=null):
 		left = p_left
 		right = p_right
-	func accept(visitor): visitor.visitDictItem(self)
+	func accept(visitor):
+		return visitor.visitDictItem(self)
 
 
 class Block extends Ast:
 	var stmts = []
 	func _init(p_stmts=null):
 		if p_stmts != null: stmts = p_stmts
-	func accept(visitor): visitor.visitBlock(self)
+	func accept(visitor):
+		return visitor.visitBlock(self)
 
 
 class While extends Stmt:
@@ -80,7 +87,8 @@ class While extends Stmt:
 	func _init(p_expr=null,p_block=null):
 		expr = p_expr
 		block = p_block
-	func accept(visitor): visitor.visitWhile(self)
+	func accept(visitor):
+		return visitor.visitWhile(self)
 
 
 class For extends Stmt:
@@ -91,7 +99,8 @@ class For extends Stmt:
 		ident = p_ident
 		expr = p_expr
 		block = p_block
-	func accept(visitor): visitor.visitFor(self)
+	func accept(visitor):
+		return visitor.visitFor(self)
 
 
 class If extends Stmt:
@@ -104,7 +113,8 @@ class If extends Stmt:
 		block = p_block
 		else_if = p_else_if
 		else_ = p_else_
-	func accept(visitor): visitor.visitIf(self)
+	func accept(visitor):
+		return visitor.visitIf(self)
 
 
 class ElseIf extends Stmt:
@@ -115,19 +125,22 @@ class ElseIf extends Stmt:
 		expr = p_expr
 		block = p_block
 		else_if = p_else_if
-	func accept(visitor): visitor.visitElseIf(self)
+	func accept(visitor):
+		return visitor.visitElseIf(self)
 
 
 class Else extends Stmt:
 	var block = null
 	func _init(p_block=null):
 		block = p_block
-	func accept(visitor): visitor.visitElse(self)
+	func accept(visitor):
+		return visitor.visitElse(self)
 
 
 class Gd extends Stmt:
 	var block = null
 	func _init(p_block=null):
 		block = p_block
-	func accept(visitor): visitor.visitGd(self)
+	func accept(visitor):
+		return visitor.visitGd(self)
 

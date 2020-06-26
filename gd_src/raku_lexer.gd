@@ -178,6 +178,9 @@ func _string(open_quote: String) -> void:
 
 
 func _newline() -> void:
+
+	_add_token(Token.Type.NEWLINE)
+
 	# The new _line has already been consumed here.
 	_line += 1
 	_column = 0

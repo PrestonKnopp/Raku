@@ -26,6 +26,8 @@ enum Type {
 	AND, # and &&
 	OR, # or ||
 
+	NEWLINE,
+
 	# a group of ' ' or '\t' after a '\n'
 	SPACE_INDENT,
 	TAB_INDENT,

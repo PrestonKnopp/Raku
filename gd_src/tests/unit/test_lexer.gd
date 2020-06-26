@@ -138,6 +138,7 @@ func test_lex_newlines():
 		'a\nb',
 		[
 			t(T.IDENTIFIER, 0,0, 0,1, 0,1, 'a'),
+			t(T.NEWLINE,    0,1, 0,2, 1,2, null),
 			t(T.IDENTIFIER, 1,0, 1,1, 2,3, 'b')
 		]
 	)
@@ -150,19 +151,23 @@ func test_lex_newlines():
 	)
 
 func test_lex_indents():
-	zip_assert_tokens(
-		'\n\t\t%\n..'.replace('.', ' ').split('%'),
+
+	assert_tokens(
+		'\n\t\t\n..'.replace('.', ' '),
 		[
+			t(T.NEWLINE, 0,0, 0,1, 0,1, null),
 			t(T.TAB_INDENT, 1,0, 1,2, 1,3, 2),
-			t(T.SPACE_INDENT, 1,0, 1,2, 1,3, 2),
+			t(T.NEWLINE, 1,2, 1,3, 3,4, null),
+			t(T.SPACE_INDENT, 2,0, 2,2, 4,6, 2)
 		]
 	)
 
 	assert_tokens(
 		'\n..\t..'.replace('.', ' '),
 		[
+			t(T.NEWLINE,      0,0, 0,1, 0,1, null),
 			t(T.SPACE_INDENT, 1,0, 1,2, 1,3, 2),
-			t(T.TAB_INDENT, 1,2, 1,3, 3,4, 1),
+			t(T.TAB_INDENT,   1,2, 1,3, 3,4, 1),
 			t(T.SPACE_INDENT, 1,3, 1,5, 4,6, 2),
 		]
 	)

@@ -30,9 +30,9 @@ func assert_tokens(source: String, expected_tokens: Array) -> void:
 	if expected_eof.type != T.EOF:
 		expected_eof = t(
 			T.EOF,
-			lexer.line, lexer.column,
-			lexer.line, lexer.column,
-			lexer.idx, lexer.idx
+			lexer._line, lexer._column,
+			lexer._line, lexer._column,
+			lexer._idx, lexer._idx
 		)
 
 	var got_eof = lexer.tokens[lexer.tokens.size() - 1]

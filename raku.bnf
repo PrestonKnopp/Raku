@@ -1,99 +1,105 @@
-<rakuscript>          ::= <statement>+
-
-<statement>           ::= <definition>
-                        | <gdscript>
-                        | <character-def>
-                        | <annotation>
-                        | <comment>
-                        | <line>
-
-<block>               ::= <statement> | <newline> <indent> <statement>+ <dedent>
-
-<definition>           ::= "define" " " <change-var>
-
-<character-def>       ::= <character-base> " " <string>
-                        | <character-base> " " <character-key> " "
-                        | <character-base> " " "stats" <change-var>
-
-<character-base>      ::= "character" " " <var-name>
-
-<character-key>       ::= "name"
-                        | "avatar"
-                        | "color"
-                        | "kind"
-                        | "prefix"
-                        | "suffix"
-
-
-<gdscript>            ::= "gd:" <gdscript-block>
-
-
-<change-var>          ::= <var-name> " "? "=" <expression>
-
-<var-name>            ::= <alpha> <digit>?
-
-<comment>             ::= "#" .*
-
-<while>               ::= "while" ("(")?  <boolean-expression> (")")? ":" <block>
-
-<if>                  ::= "if" ("(")? <boolean-expression> ")" (")")? ":" <block>
-                            <else-if>? <else>?
-
-<else-if>             ::= "elif" ("(")? <boolean-expression> ")" ":" <block> <else-if>?
-
-<else>                ::= "else" ("(")? ":" <block>
+# Grammar Syntax
+# ---------------
+#
+# *    0 or more
+# +    1 or more
+# ?    0 or 1
+# .    any char
+# ()   group
+# []   one of char
+# ""   literal char
+# -    char range
+# |    or              Only applies to adjacent symbols. E.g.
+#                      "a" | "b" "c"  reads as ("a" | "b") "c"
+#                      Multi_line or's are by line. E.g.
+#                      "a"
+#                      | "b" "c"
+#                      reads as "a" | ("b" "c")
+#
+# Todo
+# ----
+#
+# - assign operators
+# - function definition statements
+# - function call named arguments
+# - pass stmt
+# - atoms, true false
+#
+# References
+# ----------
+#
+# https://docs.python.org/3/reference/grammar.html
+# https://docs.godotengine.org/en/stable/development/file_formats/gdscript_grammar.html
+# https://docs.godotengine.org/en/stable/getting_started/scripting/gdscript/gdscript_basics.html?#operators
 
 
-<expression>          ::= <number>
-                        | <string>
-                        | <array>
-                        | <dictionary>
-                        | <boolean>
+
+rakuscript          ::= stmt+
+
+block               ::= stmt
+                      | newline indent stmt+ dedent
+
+stmt                ::= comment
+                      | while | for | if
+                      | gd
+                      | fn_call_stmt
+
+gd                  ::= "gd:" gd_block
+
+while               ::= "while" logic_expr ":" block
+for                 ::= "for" ident "in" expr ":" block
+
+if                  ::= "if" logic_expr ":" block elif? else?
+elif                ::= "elif" logic_expr ":" block elif?
+else                ::= "else" ":" block
+
+fn_call_stmt        ::= fn_call
+                      | attr (expr ","?)*
 
 
-<array>               ::= "[" <any-ws> ( <expression> ( <any-ws> "," <any-ws> <expression>? )? )* "]"
+expr                ::= logic_expr
 
-<dictionary>          ::= "{" <any-ws> (<dictionary-item>* ( <any-ws> "," <any-ws> <dictionary-item>? )? )* "}"
+logic_expr          ::= logic_or
+logic_or            ::= logic_and ("or" | "||" logic_and)*
+logic_and           ::= logic_not ("and" | "&&" logic_not)*
+logic_not           ::= (("not" | "!") logic_not) | cmp
 
-<dictionary-item>     ::= (<expression> " "* ":" " "* <expression>)
-                        | <change-var>
+cmp                 ::= math_expr (cmp_op math_expr)*
+cmp_op              ::= "==" | ">" | ">=" | "<" | "<=" | "!="
 
+math_expr           ::= math_term ("+" | "-" math_term)*
+math_term           ::= math_factor ("*" | "/" | "%" math_factor)*
+math_factor         ::= ("+" | "-") math_factor | fn_call
 
-<string>              ::= ('"' <non-dquote>* ( "\" . <non-dquote>* )* '"')
-                        | ("'" <non-squote>* ( "\" . <non-squote>* )* "'")
+fn_call             ::= attr "(" (expr ","?)* ")"
+attr                ::= subscript ("." ident)*
+subscript           ::= primary "[" expr "]"
 
-<non-dquote>          ::= [^ '"' "\" ]
+primary             ::= "true"
+                      | "false"
+                      | "null"
+                      | list
+                      | dict
+                      | str
+                      | number
+                      | ident
+                      | "(" expr ")"
 
-<non-squote>          ::= [^ "'" "\" ]
+list                ::= "[" (expr ","?)* "]"
+dict                ::= "{" (dict_item ","?)* "}"
+dict_item           ::= expr ":" expr
+                      | ident "=" expr
 
+str                 ::= sq_str | dq_str
+sq_str              ::= "'" .* "'"
+dq_str              ::= '"' .* '"'
 
-<boolean-expression>  ::= <not>? <var-name> (<comparison> <not>? <expression> ( <logic> <boolean-expression>)? )
+number              ::= digit+ ( "." digit+ )?
+digit               ::= [ "0" - "9" ]
 
-<boolean>             ::= "true" | "false" | <boolean-expression>
+comment             ::= "#" .*
 
-<comparison>          ::= "==" | ">" | ">=" | "<" | "<=" | "!="
-
-<not>                 ::= "!"|"not"
-
-<logic>               ::= "and" | "&&" | "or" | "||"
-
-
-<number>              ::= ( ( "+" | "-" ) " "? )? <digit>+ ( "." <digit>+ )?
-
-<alphanumeric>        ::= <alpha> | <digit>
-
-<digit>               ::= [ "0" - "9" ]
-
-<alpha>               ::= [ "A" - "Z" "a" - "z" "_" ]
-
-<any-ws>              ::= [ " " <tab> <newline> ]*
-
-<tab>                 ::= \t
-
-<newline>             ::= \n
-
-<indent>              ::= EXTERNAL
-
-<dedent>              ::= EXTERNAL
-
-<gdscript-block>      ::= EXTERNAL
+ident               ::= EXTERNAL
+indent              ::= EXTERNAL
+dedent              ::= EXTERNAL
+gd_block            ::= EXTERNAL

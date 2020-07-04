@@ -19,192 +19,197 @@ const KEYWORDS = {
 
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-var reporter = null
-
 var source: String = ''
+var reporter = null
 var tokens: Array = []
-var had_error: bool = false
 
-var source_len = 0
-var start_idx = 0
-var start_line = 0
-var start_column = 0
-var idx = 0
-var line = 0
-var column = 0
+var _had_error: bool = false
+var _source_len = 0
+var _start_idx = 0
+var _start_line = 0
+var _start_column = 0
+var _idx = 0
+var _line = 0
+var _column = 0
 
-func pre_lex() -> void:
-	source_len = source.length()
-	idx = 0
-	start_idx = 0
-	start_line = 0
-	start_column = 0
-	line = 0
-	column = 0
-	had_error = false
-	tokens.clear()
+
+func had_error() -> bool:
+	return _had_error
 
 func lex() -> void:
-	pre_lex()
+	_pre_lex()
 
-	while not eof():
-		start_idx = idx
-		start_line = line
-		start_column = column
-		lex_token()
+	while not _eof():
+		_start_idx = _idx
+		_start_line = _line
+		_start_column = _column
+		_lex_token()
 
 	tokens.append(Token.new(
 		Token.Type.EOF,
-		line, column,
-		line, column,
-		idx, idx,
+		_line, _column,
+		_line, _column,
+		_idx, _idx,
 		null
 	))
 
-func lex_token() -> void:
-	var c: String = advance()
-	if c ==  '\\': add_token(Token.Type.BACK_SLASH)
-	elif c == '/': add_token(Token.Type.SLASH)
-	elif c == '(': add_token(Token.Type.PAREN_OPEN)
-	elif c == ')': add_token(Token.Type.PAREN_CLOSE)
-	elif c == '{': add_token(Token.Type.CURLY_OPEN)
-	elif c == '}': add_token(Token.Type.CURLY_CLOSE)
-	elif c == '[': add_token(Token.Type.BRACK_OPEN)
-	elif c == ']': add_token(Token.Type.BRACK_CLOSE)
-	elif c == '+': add_token(Token.Type.PLUS)
-	elif c == '-': add_token(Token.Type.MINUS)
-	elif c == '*': add_token(Token.Type.STAR)
-	elif c == ':': add_token(Token.Type.COLON)
-	elif c == '=': add_token(Token.Type.EQUAL_EQUAL if check('=') else Token.Type.EQUAL)
-	elif c == '>': add_token(Token.Type.GREATER_THAN_EQUAL if check('=') else Token.Type.GREATER_THAN)
-	elif c == '<': add_token(Token.Type.LESS_THAN_EQUAL if check('=') else Token.Type.LESS_THAN)
-	elif c == '!': add_token(Token.Type.NOT_EQUAL if check('=') else Token.Type.NOT)
-	elif c == '&' and check('&'): add_token(Token.Type.AND)
-	elif c == '|' and check('|'): add_token(Token.Type.OR)
-	elif c == '#': comment()
-	elif c == '"' or c == "'": string(c)
-	elif c.is_valid_integer(): number()
-	elif c.is_valid_identifier(): identifier()
-	elif c == '\n': newline()
+func _pre_lex() -> void:
+	_source_len = source.length()
+	_idx = 0
+	_start_idx = 0
+	_start_line = 0
+	_start_column = 0
+	_line = 0
+	_column = 0
+	_had_error = false
+	tokens.clear()
+
+func _lex_token() -> void:
+	var c: String = _advance()
+	if c ==  '\\': _add_token(Token.Type.BACK_SLASH)
+	elif c == '/': _add_token(Token.Type.SLASH)
+	elif c == '(': _add_token(Token.Type.PAREN_OPEN)
+	elif c == ')': _add_token(Token.Type.PAREN_CLOSE)
+	elif c == '{': _add_token(Token.Type.CURLY_OPEN)
+	elif c == '}': _add_token(Token.Type.CURLY_CLOSE)
+	elif c == '[': _add_token(Token.Type.BRACK_OPEN)
+	elif c == ']': _add_token(Token.Type.BRACK_CLOSE)
+	elif c == '+': _add_token(Token.Type.PLUS)
+	elif c == '-': _add_token(Token.Type.MINUS)
+	elif c == '*': _add_token(Token.Type.STAR)
+	elif c == ':': _add_token(Token.Type.COLON)
+	elif c == '=': _add_token(Token.Type.EQUAL_EQUAL if _match('=') else Token.Type.EQUAL)
+	elif c == '>': _add_token(Token.Type.GREATER_THAN_EQUAL if _match('=') else Token.Type.GREATER_THAN)
+	elif c == '<': _add_token(Token.Type.LESS_THAN_EQUAL if _match('=') else Token.Type.LESS_THAN)
+	elif c == '!': _add_token(Token.Type.NOT_EQUAL if _match('=') else Token.Type.NOT)
+	elif c == '&' and _match('&'): _add_token(Token.Type.AND)
+	elif c == '|' and _match('|'): _add_token(Token.Type.OR)
+	elif c == '#': _comment()
+	elif c == '"' or c == "'": _string(c)
+	elif c.is_valid_integer(): _number()
+	elif c.is_valid_identifier(): _identifier()
+	elif c == '\n': _newline()
 	elif c == '\r': pass
 	else:
-		error('Unknown character.')
+		_error('Unknown character.')
 
-func eof():
-	return idx >= source_len
+func _eof():
+	return _idx >= _source_len
 
-func consume() -> void:
-	idx += 1
-	column += 1
+func _consume() -> void:
+	_idx += 1
+	_column += 1
 
-func advance() -> String:
-	consume()
-	return source[idx - 1]
+func _advance() -> String:
+	_consume()
+	return source[_idx - 1]
 
-func peek() -> String:
-	return '' if eof() else source[idx]
+func _peek() -> String:
+	return '' if _eof() else source[_idx]
 
-func check(c: String) -> bool:
-	if eof(): return false
-	if source[idx] != c: return false
+func _match(c: String) -> bool:
+	if _eof(): return false
+	if source[_idx] != c: return false
 
-	consume()
+	_consume()
 	return true
 
-func comment() -> void:
-	while peek() != '\n' and peek() != '':
-		consume()
-	add_token(Token.Type.COMMENT)
+func _comment() -> void:
+	while _peek() != '\n' and _peek() != '':
+		_consume()
+	_add_token(Token.Type.COMMENT)
 
-func number() -> void:
-	while peek().is_valid_integer():
-		consume()
+func _number() -> void:
+	while _peek().is_valid_integer():
+		_consume()
 
-	if check('.'):
-		if not peek().is_valid_integer():
-			error('Numbers cannot end with a ".".')
+	if _match('.'):
+		if not _peek().is_valid_integer():
+			_error('Numbers cannot end with a ".".')
 		
-		while peek().is_valid_integer():
-			consume()
+		while _peek().is_valid_integer():
+			_consume()
 
-		var literal = float(source.substr(start_idx, idx - start_idx))
-		add_token(Token.Type.FLOAT, literal)
+		var literal = float(source.substr(_start_idx, _idx - _start_idx))
+		_add_token(Token.Type.FLOAT, literal)
 
 		return
 	
-	var literal = int(source.substr(start_idx, idx - start_idx))
-	add_token(Token.Type.INTEGER, literal)
+	var literal = int(source.substr(_start_idx, _idx - _start_idx))
+	_add_token(Token.Type.INTEGER, literal)
 
-func identifier() -> void:
+func _identifier() -> void:
 	# is_valid_identifier() will return
-	# - false if peek() is in DIGITS.
-	# - true if peek() is '_'
-	while peek().is_valid_identifier() or (peek() in DIGITS):
-		consume()
+	# - false if _peek() is in DIGITS.
+	# - true if _peek() is '_'
+	while _peek().is_valid_identifier() or (_peek() in DIGITS):
+		_consume()
 	
-	var literal = source.substr(start_idx, idx - start_idx)
+	var literal = source.substr(_start_idx, _idx - _start_idx)
 	var token_type = KEYWORDS.get(literal, Token.Type.IDENTIFIER)
 	if token_type != Token.Type.IDENTIFIER:
 		# Literals for keywords are superfluous.
 		literal = null
-	add_token(token_type, literal)
+	_add_token(token_type, literal)
 
 
-func string(open_quote: String) -> void:
+func _string(open_quote: String) -> void:
 	var c: String
 	var no_closing_quote: bool = true
-	while not eof():
-		c = advance()
+	while not _eof():
+		c = _advance()
 		if c == open_quote:
 			no_closing_quote = false
 			break
-		elif c == '\\' and check(open_quote):
+		elif c == '\\' and _match(open_quote):
 			pass
 		elif c == '\n':
-			line += 1
-			column = 0
+			_line += 1
+			_column = 0
 
 
 	if no_closing_quote:
-		error('Unterminated string.')
+		_error('Unterminated string.')
 
-	var content_start_idx = start_idx + 1
-	var content_count = idx - content_start_idx - 1
+	var content_start_idx = _start_idx + 1
+	var content_count = _idx - content_start_idx - 1
 	var literal = source.substr(content_start_idx, content_count)
-	add_token(Token.Type.STRING_CONTENT, literal)
+	_add_token(Token.Type.STRING_CONTENT, literal)
 
 
-func newline() -> void:
-	# The new line has already been consumed here.
-	line += 1
-	column = 0
+func _newline() -> void:
+	# The new _line has already been consumed here.
+	_line += 1
+	_column = 0
 
 	# Get indents.
-	while not eof():
-		var c: String = peek()
+	while not _eof():
+		var c: String = _peek()
 		if c != ' ' and c != '\t':
 			break
 
 		# Get space indents.
-		start_idx = idx
-		start_column = column
-		start_line = line
-		while check(' '): pass
-		if start_idx != idx:
-			add_token(Token.Type.SPACE_INDENT, idx - start_idx)
+		_start_idx = _idx
+		_start_column = _column
+		_start_line = _line
+		while _match(' '): pass
+		if _start_idx != _idx:
+			_add_token(Token.Type.SPACE_INDENT, _idx - _start_idx)
 
 		# Get tab indents.
-		start_idx = idx
-		start_column = column
-		start_line = line
-		while check('\t'): pass
-		if start_idx != idx:
-			add_token(Token.Type.TAB_INDENT, idx - start_idx)
+		_start_idx = _idx
+		_start_column = _column
+		_start_line = _line
+		while _match('\t'): pass
+		if _start_idx != _idx:
+			_add_token(Token.Type.TAB_INDENT, _idx - _start_idx)
 
-func add_token(type: int, literal=null) -> void:
-	tokens.append(Token.new(type, start_line, start_column, line, column,
-		start_idx, idx, literal))
+func _add_token(type: int, literal=null) -> void:
+	tokens.append(Token.new(type, _start_line, _start_column, _line, _column,
+		_start_idx, _idx, literal))
 
-func error(message: String) -> void:
-	had_error = true
-	reporter.report(message, start_idx, idx, line, column)
+func _error(message: String) -> void:
+	_had_error = true
+	if not reporter:
+		return
+	reporter.report(message, _start_idx, _idx, _line, _column)

@@ -119,9 +119,9 @@ func test_lex_keywords():
 	zip_assert_tokens(
 		['if', 'elif', 'else'],
 		[
-			t(T.IF, 0,0, 0,2, 0,2),
-			t(T.ELIF, 0,0, 0,4, 0,4),
-			t(T.ELSE, 0,0, 0,4, 0,4),
+			t(T.IF, 0,0, 0,2, 0,2, 'if'),
+			t(T.ELIF, 0,0, 0,4, 0,4, 'elif'),
+			t(T.ELSE, 0,0, 0,4, 0,4, 'else'),
 		]
 	)
 

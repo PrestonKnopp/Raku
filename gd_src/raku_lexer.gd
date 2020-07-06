@@ -15,6 +15,13 @@ const KEYWORDS = {
 	'in' : Token.Type.IN,
 	'true' : Token.Type.TRUE,
 	'false' : Token.Type.FALSE,
+	'null' : Token.Type.NULL,
+}
+
+const KEYWORD_LITERALS = {
+	Token.Type.TRUE : true,
+	Token.Type.FALSE : false,
+	Token.Type.NULL : null,
 }
 
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -78,6 +85,9 @@ func _lex_token() -> void:
 	elif c == '-': _add_token(Token.Type.MINUS)
 	elif c == '*': _add_token(Token.Type.STAR)
 	elif c == ':': _add_token(Token.Type.COLON)
+	elif c == ',': _add_token(Token.Type.COMMA)
+	elif c == '.': _add_token(Token.Type.DOT)
+	elif c == '%': _add_token(Token.Type.PERCENT)
 	elif c == '=': _add_token(Token.Type.EQUAL_EQUAL if _match('=') else Token.Type.EQUAL)
 	elif c == '>': _add_token(Token.Type.GREATER_THAN_EQUAL if _match('=') else Token.Type.GREATER_THAN)
 	elif c == '<': _add_token(Token.Type.LESS_THAN_EQUAL if _match('=') else Token.Type.LESS_THAN)
@@ -90,6 +100,7 @@ func _lex_token() -> void:
 	elif c.is_valid_identifier(): _identifier()
 	elif c == '\n': _newline()
 	elif c == '\r': pass
+	elif c == ' ': pass
 	else:
 		_error('Unknown character.')
 
@@ -145,11 +156,9 @@ func _identifier() -> void:
 	while _peek().is_valid_identifier() or (_peek() in DIGITS):
 		_consume()
 	
-	var literal = source.substr(_start_idx, _idx - _start_idx)
-	var token_type = KEYWORDS.get(literal, Token.Type.IDENTIFIER)
-	if token_type != Token.Type.IDENTIFIER:
-		# Literals for keywords are superfluous.
-		literal = null
+	var ident = source.substr(_start_idx, _idx - _start_idx)
+	var token_type = KEYWORDS.get(ident, Token.Type.IDENTIFIER)
+	var literal = KEYWORD_LITERALS.get(token_type, ident)
 	_add_token(token_type, literal)
 
 

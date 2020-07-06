@@ -13,6 +13,9 @@ enum Type {
 	MINUS, # -
 	STAR, # *
 	COLON, # :
+	COMMA, # ,
+	DOT, # .
+	PERCENT, # %
 
 	EQUAL, # =
 	EQUAL_EQUAL, # ==
@@ -26,7 +29,7 @@ enum Type {
 	AND, # and &&
 	OR, # or ||
 
-	NEWLINE,
+	NEWLINE, # \n
 
 	# a group of ' ' or '\t' after a '\n'
 	SPACE_INDENT,
@@ -50,6 +53,7 @@ enum Type {
 	IN, # in
 	TRUE, # true
 	FALSE, # false
+	NULL, # null
 
 	EOF
 }

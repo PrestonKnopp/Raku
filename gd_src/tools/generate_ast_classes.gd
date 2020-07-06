@@ -23,19 +23,26 @@ func _init():
 	clazz('Expr', 'Ast')
 	clazz('Stmt', 'Ast')
 
-	mk_all("""Literal:Expr:token
-Unary:Expr:op,right
-Binary:Expr:left,op,right
-List:Expr:exprs=[]
-Dict:Expr:items=[]
-DictItem:Expr:left,right
+	mk_all("""
+Literal:Expr:token
+RakuScript:Ast:stmts=[]
 Block:Ast:stmts=[]
 While:Stmt:expr,block
 For:Stmt:ident,expr,block
 If:Stmt:expr,block,else_if,else_
 ElseIf:Stmt:expr,block,else_if
 Else:Stmt:block
-Gd:Stmt:block""")
+FnCallStmt:Stmt:expr,args=[]
+Gd:Stmt:block
+Unary:Expr:op,right
+Binary:Expr:left,op,right
+Attr:Expr:expr,idents=[]
+Subscript:Expr:expr,subscript
+List:Expr:exprs=[]
+Dict:Expr:items=[]
+DictItem:Expr:left,assigns=true,right
+Group:Expr:expr
+""")
 
 	var f = File.new()
 	var err = f.open('raku_ast.gd', f.WRITE)
@@ -103,7 +110,7 @@ func mk(p_name, extend, props_str):
 
 # section: ClassName:ExtendName:prop1,prop2=def_val,prop3
 func mk_all(text):
-	var sections = text.split('\n')
+	var sections = text.split('\n', false)
 	for section in sections:
 		var section_parts = section.split(':')
 		if section_parts.size() != 3:

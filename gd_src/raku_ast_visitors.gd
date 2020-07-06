@@ -19,11 +19,22 @@ class FuncStyleFormatter extends Visitor:
 			s += ')'
 		return s
 
+	func visitRakuScript(e):
+		return funcify('rakuscript', e.stmts)
+
+	func visitFnCallStmt(e):
+		return funcify('call', [e.expr] + e.args)
+
+	func visitList(e):
+		return funcify('list', e.exprs)
+
 	func visitLiteral(e):
+		if e.token.type == e.token.Type.STRING_CONTENT:
+			return '"%s"' % e.token.literal
 		return str(e.token.literal)
 
 	func visitUnary(e):
 		return funcify(e.op.get_type_name().to_lower(), [e.right])
-	
+
 	func visitBinary(e):
 		return funcify(e.op.get_type_name().to_lower(), [e.left, e.right])

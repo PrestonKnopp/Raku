@@ -25,5 +25,9 @@ func test_func_style_printer():
 			Ast.Literal.new(t(0, 10))
 		)
 	)
-
-	print(tree.accept(Visitors.FuncStyleFormatter.new()))
+	
+	var formatter = Visitors.FuncStyleFormatter.new()
+	var got = tree.accept(formatter)
+	var expected = 'plus(plus(10 10) minus(10))'
+	assert_eq(got, expected)
+	print(expected)

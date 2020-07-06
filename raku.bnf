@@ -53,8 +53,10 @@ if                  ::= "if" logic_expr ":" block elif? else?
 elif                ::= "elif" logic_expr ":" block elif?
 else                ::= "else" ":" block
 
-fn_call_stmt        ::= fn_call
-                      | attr (expr ","?)*
+fn_call_stmt        ::= attr ( ("(" fn_arg* ")")
+                               | fn_arg* fn_args_block? )
+fn_args_block       ::= newline indent fn_arg+ dedent
+fn_arg              ::= expr ","?
 
 
 expr                ::= logic_expr
@@ -83,7 +85,9 @@ primary             ::= "true"
                       | str
                       | number
                       | ident
-                      | "(" expr ")"
+                      | group
+
+group               ::= "(" expr ")"
 
 list                ::= "[" (expr ","?)* "]"
 dict                ::= "{" (dict_item ","?)* "}"

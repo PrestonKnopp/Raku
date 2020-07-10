@@ -73,7 +73,7 @@ func _peek():
 
 func _lookahead(by, for_token_type):
 	var look_token = _get_lookahead(by)
-	return look_token == for_token_type
+	return look_token.type == for_token_type
 
 func _get_lookahead(by):
 	var look_idx = _idx + by

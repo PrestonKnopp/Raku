@@ -393,8 +393,14 @@ func _math_factor():
 func _fn_call():
 	var ast = _attr()
 	if _match(T.PAREN_OPEN):
-		# TODO
-		pass
+		var fn_call_token = _prev()
+		ast = Ast.FnCallExpr.new(ast)
+		while not _match(T.PAREN_CLOSE):
+			if _eof():
+				_error('Unclosed function call.', fn_call_token)
+				break
+			ast.args.append(_expr())
+			_match_commas()
 	return ast
 
 func _attr():

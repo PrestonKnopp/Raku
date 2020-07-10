@@ -33,6 +33,7 @@ If:Stmt:expr,block,else_if,else_
 ElseIf:Stmt:expr,block,else_if
 Else:Stmt:block
 FnCallStmt:Stmt:expr,args=[]
+FnCallExpr:Expr:expr,args=[]
 Gd:Stmt:block
 Unary:Expr:op,right
 Binary:Expr:left,op,right
@@ -96,7 +97,7 @@ func mk(p_name, extend, props_str):
 			fn_init_block.append('\t%s = p_%s' % [name, name])
 		else:
 			fn_init_block.append('\tif p_%s != null: %s = p_%s' % [name, name, name])
-	
+
 
 	block.append('func _init(%s):' % fn_init_params.join(','))
 	block.append_array(fn_init_block)

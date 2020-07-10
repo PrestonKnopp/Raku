@@ -15,6 +15,7 @@ func assert_tree(source, expected):
 		return
 	var got = tree.accept(Visitors.FuncStyleFormatter.new())
 	expected = str('rakuscript(', expected, ')')
+	gut.p(str(source, ' -> ', got, ' :: ', expected))
 	assert_eq(got, expected)
 
 func assert_trees(list):
@@ -36,7 +37,9 @@ func test_parser():
 		'hello(1 + 1)', 'call(hello plus(1 1))',
 		'a("hi")', 'call(a "hi")',
 		'a([1, 2])', 'call(a list(1 2))',
-		'a([1 2])', 'call(a list(1 2))'
+		'a([1 2])', 'call(a list(1 2))',
+		'a(a(1))', 'call(a call(a 1))',
+		'a a(1)', 'call(a call(a 1))',
 	])
 
 func test_comment():

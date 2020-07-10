@@ -107,6 +107,16 @@ class FnCallStmt extends Stmt:
 		return visitor.visitFnCallStmt(self)
 
 
+class FnCallExpr extends Expr:
+	var expr = null
+	var args = []
+	func _init(p_expr=null,p_args=null):
+		expr = p_expr
+		if p_args != null: args = p_args
+	func accept(visitor):
+		return visitor.visitFnCallExpr(self)
+
+
 class Gd extends Stmt:
 	var block = null
 	func _init(p_block=null):

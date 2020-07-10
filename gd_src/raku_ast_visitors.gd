@@ -25,6 +25,9 @@ class FuncStyleFormatter extends Visitor:
 	func visitFnCallStmt(e):
 		return funcify('call', [e.expr] + e.args)
 
+	func visitFnCallExpr(e):
+		return visitFnCallStmt(e)
+
 	func visitList(e):
 		return funcify('list', e.exprs)
 

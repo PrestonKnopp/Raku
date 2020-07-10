@@ -1,8 +1,16 @@
 extends "res://addons/gut/test.gd"
 
+const Reporter = preload('res://reporter.gd')
+
+class GutReporter extends Reporter:
+	var gut
+	func _init(p_gut): gut = p_gut
+	func publish():
+		for msg in _messages: gut.p(msg)
+
+
 var Parser = load('res://raku_parser.gd')
 var Visitors = load('res://raku_ast_visitors.gd')
-var Reporter = load('res://reporter.gd')
 
 var parser
 
@@ -28,7 +36,7 @@ func assert_trees(list):
 
 func before_each():
 	parser = Parser.new()
-	parser.reporter = Reporter.new()
+	parser.reporter = GutReporter.new(gut)
 
 func after_each():
 	parser.reporter.publish()

@@ -124,6 +124,16 @@ func _eof():
 	return _peek().type == T.EOF
 
 
+# Grammar Helpers
+
+func _match_commas():
+		var comma_count = 0
+		while _match(T.COMMA):
+			comma_count += 1
+		if comma_count > 1:
+			_error('Extra comma', _prev())
+
+
 # ------------------------------------------------------------------------------
 #                                   Grammar Rules
 # ------------------------------------------------------------------------------
@@ -293,7 +303,7 @@ func _fn_args_block():
 
 func _fn_arg():
 	var expr = _expr()
-	_match(T.COMMA)
+	_match_commas()
 	return expr
 
 func _expr():
@@ -417,7 +427,6 @@ func _primary():
 	elif _check(T.PAREN_OPEN):
 		ast = _group()
 	else:
-		breakpoint
 		_error('Unknown primary', _peek())
 
 	return ast
@@ -439,11 +448,7 @@ func _list():
 	while next:
 		ast.exprs.append(next)
 		_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])
-		var comma_count = 0
-		while _match(T.COMMA):
-			comma_count += 1
-		if comma_count > 1:
-			_error('Extra comma', _prev())
+		_match_commas()
 		next = _expr()
 
 	_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])
@@ -458,11 +463,7 @@ func _dict():
 	while next:
 		ast.items.append(next)
 		_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])
-		var comma_count = 0
-		while _match(T.COMMA):
-			comma_count += 1
-		if comma_count > 1:
-			_error('Extra commas', _prev())
+		_match_commas()
 		next = _dict_item()
 
 	_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])

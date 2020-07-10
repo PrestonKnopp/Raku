@@ -56,10 +56,12 @@ else                ::= "else" ":" block
 fn_call_stmt        ::= fn_call
                       | attr (expr ","?)*
 
+pass_stmt           ::= "pass"
+
 
 expr                ::= logic_expr
 
-logic_expr          ::= logic_or
+logic_expr          ::= logic_or | primary == primary
 logic_or            ::= logic_and ("or" | "||" logic_and)*
 logic_and           ::= logic_not ("and" | "&&" logic_not)*
 logic_not           ::= (("not" | "!") logic_not) | cmp
@@ -97,9 +99,19 @@ dq_str              ::= '"' .* '"'
 number              ::= digit+ ( "." digit+ )?
 digit               ::= [ "0" - "9" ]
 
+alphanumeric        ::= alpha | digit
+var_name            ::= alpha digit?
+alpha               ::= [ "A" - "Z" "a" - "z" "_" ]
+
 comment             ::= "#" .*
+
+definition          ::= "definie" (assign | ":" newline indent assign+ dedent)
+
+assign_op           ::= "=" | "-=" | "+=" | "*=" | "/="
+assign              ::= var_name assign_op expr
 
 ident               ::= EXTERNAL
 indent              ::= EXTERNAL
 dedent              ::= EXTERNAL
 gd_block            ::= EXTERNAL
+

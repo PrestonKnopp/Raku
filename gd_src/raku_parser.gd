@@ -458,9 +458,10 @@ func _list():
 		ast.exprs.append(next)
 		_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])
 		_match_commas()
+		if _check(T.BRACK_CLOSE):
+			break
 		next = _expr()
 
-	_ignore([T.NEWLINE, T.TAB_INDENT, T.SPACE_INDENT])
 	_expect(T.BRACK_CLOSE)
 	return ast
 

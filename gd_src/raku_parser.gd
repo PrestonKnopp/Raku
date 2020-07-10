@@ -260,17 +260,19 @@ func _fn_call_stmt():
 	ast.expr = _attr()
 
 	var matched_paren = _match(T.PAREN_OPEN)
-	while true:
-		var should_break = false
-		for t in [T.PAREN_CLOSE]:
-			if _check(t):
-				should_break = true
-				break
-		if should_break:
+	while not _eof():
+		if _check(T.PAREN_CLOSE):
 			break
-		var arg = _fn_arg()
-		if arg:
-			ast.args.append(arg)
+		if _check([
+		T.STRING_CONTENT,
+		T.INTEGER,
+		T.FLOAT,
+		T.IDENTIFIER,
+		T.BRACK_OPEN,
+		T.CURLY_OPEN,
+		T.PAREN_OPEN,
+		]):
+			ast.args.append(_fn_arg())
 		else:
 			break
 	if matched_paren:
@@ -490,7 +492,7 @@ func _dict_item():
 		_expect(T.EQUAL)
 	if (ast.assigns and not
 	   (ast.left is Ast.Literal and
-	    ast.left.token == T.IDENTIFIER)):
+		ast.left.token == T.IDENTIFIER)):
 		_error('Left hand of dict item assignment should be an identifier', _prev())
 	ast.right = _expr()
 	return ast

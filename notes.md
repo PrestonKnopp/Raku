@@ -182,7 +182,9 @@ be:
 There are 2 types of string interpolation in Raku:
 
 ### Ren'Py like - used in text of dialogs
-This is in Rakugo it self.
+This is in Rakugo it self, look at:
+- [addons\Rakugo\lib\text.gd](https://github.com/rakugoteam/Rakugo/blob/master/addons/Rakugo/lib/text.gd)
+- [addons\Rakugo\emojis\emojis.gd](https://github.com/rakugoteam/Rakugo/blob/master/addons/Rakugo/emojis/emojis.gd)
 It's converts Ren'Py like string to Godot's BBCode, but whit emojis and values.
 
 **Example**:

@@ -17,6 +17,7 @@ func assert_tree(source, expected):
 	expected = str('rakuscript(', expected, ')')
 	gut.p(str(source, ' -> ', got, ' :: ', expected))
 	assert_eq(got, expected)
+	assert_false(parser.had_error(), 'Parser had errors.')
 
 func assert_trees(list):
 	assert_true(list.size() % 2 == 0)

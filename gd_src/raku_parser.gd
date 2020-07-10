@@ -50,6 +50,9 @@ func _pre_parse() -> void:
 func get_root():
 	return _root
 
+func had_error():
+	return _had_error
+
 func _error(msg, token):
 	_had_error = true
 	if reporter == null:
@@ -171,7 +174,7 @@ func _block():
 
 # 	else:
 # 		ast.stmts.append(_stmt())
-	
+
 	return ast
 
 

@@ -34,6 +34,8 @@ class FuncStyleFormatter extends Visitor:
 	func visitLiteral(e):
 		if e.token.type == e.token.Type.STRING_CONTENT:
 			return '"%s"' % e.token.literal
+		elif e.token.type == e.token.Type.COMMENT:
+			return 'comment'
 		return str(e.token.literal)
 
 	func visitUnary(e):

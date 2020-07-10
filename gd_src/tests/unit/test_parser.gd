@@ -62,7 +62,7 @@ func test_func_call_stmt():
 	])
 
 func test_control_flow():
-	assert_tree([
+	assert_trees([
 	"while true:\n\tpass",
 	"while(true block(pass))",
 

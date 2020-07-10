@@ -26,6 +26,7 @@ func assert_tree(source, expected):
 	gut.p(str(source, ' -> ', got, ' :: ', expected))
 	assert_eq(got, expected)
 	assert_false(parser.had_error(), 'Parser had errors.')
+	parser.reporter.publish()
 
 func assert_trees(list):
 	assert_true(list.size() % 2 == 0)
@@ -39,7 +40,7 @@ func before_each():
 	parser.reporter = GutReporter.new(gut)
 
 func after_each():
-	parser.reporter.publish()
+	pass
 
 func test_parser():
 	assert_trees([

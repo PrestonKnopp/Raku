@@ -179,7 +179,29 @@ be:
 
 ## String Interpolation
 
-TODO
+There are 2 types of string interpolation in Raku:
+
+### Ren'Py like - used in text of dialogs
+This is in Rakugo it self.
+It's converts Ren'Py like string to Godot's BBCode, but whit emojis and values.
+
+**Example**:
+```
+maya say "Hi, I'm [maya.name] and my {b}happy{/b} to meet you [:smile:]."
+```
+String it will be interpolate to something like this:
+```
+"Hi, I'm Maya and my [b]happy[/b] to meet you smile_emoji."
+```
+
+### Values in squrebrakets
+*Example**:
+```
+define i = 3
+print "i is equal [i]"
+# will give you: i is equal 3
+```
+
 
 ## Function Syntax
 

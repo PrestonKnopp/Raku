@@ -89,16 +89,17 @@ func _get_lookahead(by):
 func _prev():
 	return _lexer.tokens[_idx - 1]
 
-func _check(token_type):
-	return _peek().type == token_type
-
-func _match(token_types=[]):
+func _check(token_types):
 	if typeof(token_types) == TYPE_ARRAY:
 		for type in token_types:
-			if _check(type):
-				_consume()
+			if _peek().type == type:
 				return true
-	elif _check(token_types):
+		return false
+	else:
+		return _peek().type == token_types
+
+func _match(token_types=[]):
+	if _check(token_types):
 		_consume()
 		return true
 	return false
